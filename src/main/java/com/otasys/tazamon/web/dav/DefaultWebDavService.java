@@ -1,10 +1,17 @@
 package com.otasys.tazamon.web.dav;
 
+import com.otasys.tazamon.xml.XmlConversionService;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.jackrabbit.webdav.DavConstants;
+import org.apache.jackrabbit.webdav.DavException;
+import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.OptionsMethod;
+import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,18 +25,27 @@ import java.io.IOException;
 public class DefaultWebDavService implements WebDavService {
 
     private HttpClient httpClient;
+    private VelocityEngine velocityEngine;
+    private XmlConversionService xmlConversionService;
+    private static final String SERVER_URI = "https://p01-contacts.icloud.com/";
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWebDavService.class);
 
     @Inject
-    public DefaultWebDavService(HttpClient httpClient) {
+    public DefaultWebDavService(
+            HttpClient httpClient,
+            VelocityEngine velocityEngine,
+            XmlConversionService xmlConversionService
+    ) {
         this.httpClient = httpClient;
+        this.velocityEngine = velocityEngine;
+        this.xmlConversionService = xmlConversionService;
     }
 
     @Override
     public Boolean isWebDavSupported() {
         OptionsMethod options = null;
         try {
-            options = new OptionsMethod("https://p01-contacts.icloud.com/");
+            options = new OptionsMethod(SERVER_URI);
             httpClient.executeMethod(options);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Option request status {}", options.getStatusLine());
@@ -50,5 +66,35 @@ public class DefaultWebDavService implements WebDavService {
                 options.releaseConnection();
             }
         }
+    }
+
+    @Override
+    public String getUserPrincipalUnifiedId(String basicAuthToken) {
+        PropFindMethod propFind = null;
+        try {
+            propFind = new PropFindMethod(SERVER_URI,
+                    DavConstants.PROPFIND_ALL_PROP, DavConstants.DEPTH_0);
+            propFind.addRequestHeader("Authorization", basicAuthToken);
+            propFind.setRequestBody(
+                    xmlConversionService.loadXmlDocumentFromString(
+                            VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "iCloudPrincipal.vm", "UTF-8", null)
+                    )
+            );
+            httpClient.executeMethod(propFind);
+            MultiStatus multiStatus = propFind.getResponseBodyAsMultiStatus();
+            LOGGER.info("{}", multiStatus.getResponses()[0].getProperties(200).getContent());
+        } catch (IOException | DavException e) {
+            LOGGER.error("Error occurred while trying to fetch server WEB DAV properties.");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Exception Details: ", e);
+            }
+        } finally {
+            if (propFind != null) {
+                propFind.releaseConnection();
+            }
+        }
+
+
+        return "";
     }
 }
