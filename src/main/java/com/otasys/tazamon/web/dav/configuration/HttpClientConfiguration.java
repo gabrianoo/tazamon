@@ -1,4 +1,4 @@
-package com.otasys.tazamon.web.dav.configuration.http.apache;
+package com.otasys.tazamon.web.dav.configuration;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.springframework.context.annotation.Bean;
