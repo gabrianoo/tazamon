@@ -29,10 +29,20 @@
 	</properties>
 
 	<dependencies>
+        <!-- Spring boot managed dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
+        <!-- Manually managed dependencies -->
         <!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
         <dependency>
             <groupId>javax.inject</groupId>
@@ -51,7 +61,8 @@
 			<artifactId>jackrabbit-webdav</artifactId>
 			<version>${org.apache.jackrabbit.version}</version>
 		</dependency>
-
+        <!-- Testing Dependencies -->
+        <!-- Spring boot testing managed dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
