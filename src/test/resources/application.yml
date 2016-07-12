@@ -27,3 +27,7 @@ web:
           - p07-contacts.icloud.com
           - p08-contacts.icloud.com
           - p09-contacts.icloud.com
+
+# Set our tests level to DEBUG
+logging:
+  level.com.otasys.tazamon: DEBUG
