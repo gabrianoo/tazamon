@@ -34,7 +34,7 @@ public class DefaultXmlConversionService implements XmlConversionService {
         try {
             transformer.transform(source, result);
         } catch (TransformerException e) {
-            LOGGER.error("Error converting the following string [{}] to XML [{}]", xml, Document.class.getCanonicalName());
+            LOGGER.error("Error converting the following string [{}] to XML document of type [{}]", xml, Document.class.getCanonicalName());
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("", e);
             }
@@ -49,7 +49,7 @@ public class DefaultXmlConversionService implements XmlConversionService {
         try {
             transformer.transform(source, result);
         } catch (TransformerException e) {
-            LOGGER.error("Error converting the following XML document [{}] to String [{}]", document, Document.class.getCanonicalName());
+            LOGGER.error("Error converting the following XML document [{}] of type [{}] to String", document, Document.class.getCanonicalName());
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("", e);
             }
