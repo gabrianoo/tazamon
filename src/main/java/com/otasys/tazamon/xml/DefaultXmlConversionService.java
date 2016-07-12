@@ -7,7 +7,8 @@ import org.w3c.dom.Document;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.transform.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -28,7 +29,7 @@ public class DefaultXmlConversionService implements XmlConversionService {
 
     @Override
     public Document loadXmlDocumentFromString(String xml) {
-        Source source = new StreamSource(new StringReader(xml));
+        StreamSource source = new StreamSource(new StringReader(xml));
         DOMResult result = new DOMResult();
         try {
             transformer.transform(source, result);
