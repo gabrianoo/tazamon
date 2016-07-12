@@ -2,6 +2,7 @@ package com.otasys.tazamon.web.dav;
 
 import com.otasys.tazamon.xml.XmlConversionService;
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.DavException;
@@ -16,6 +17,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * @see <a href="http://blogs.nologin.es/rickyepoderi/index.php?/archives/14-Introducing-CalDAV-Part-I.html">Introducing CalDAV Part-I</a>
@@ -27,6 +29,7 @@ public class DefaultWebDavService implements WebDavService {
     private HttpClient httpClient;
     private VelocityEngine velocityEngine;
     private XmlConversionService xmlConversionService;
+    private HostConfiguration hostConfiguration;
     private static final String SERVER_URI = "https://p01-contacts.icloud.com/";
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWebDavService.class);
 
@@ -39,6 +42,12 @@ public class DefaultWebDavService implements WebDavService {
         this.httpClient = httpClient;
         this.velocityEngine = velocityEngine;
         this.xmlConversionService = xmlConversionService;
+        this.hostConfiguration = new HostConfiguration();
+        String httpsProxyServerUriString = System.getenv("HTTPS_PROXY");
+        if (httpsProxyServerUriString != null && !httpsProxyServerUriString.isEmpty()) {
+            URI httpsProxyServerURI = URI.create(System.getenv("HTTPS_PROXY"));
+            this.hostConfiguration.setProxy(httpsProxyServerURI.getHost(), httpsProxyServerURI.getPort());
+        }
     }
 
     @Override
@@ -46,7 +55,7 @@ public class DefaultWebDavService implements WebDavService {
         OptionsMethod options = null;
         try {
             options = new OptionsMethod(SERVER_URI);
-            httpClient.executeMethod(options);
+            httpClient.executeMethod(hostConfiguration, options);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Option request status {}", options.getStatusLine());
             }
@@ -80,7 +89,7 @@ public class DefaultWebDavService implements WebDavService {
                             VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "iCloudPrincipal.vm", "UTF-8", null)
                     )
             );
-            httpClient.executeMethod(propFind);
+            httpClient.executeMethod(hostConfiguration, propFind);
             MultiStatus multiStatus = propFind.getResponseBodyAsMultiStatus();
             LOGGER.info("{}", multiStatus.getResponses()[0].getProperties(200).getContent());
         } catch (IOException | DavException e) {
@@ -93,8 +102,6 @@ public class DefaultWebDavService implements WebDavService {
                 propFind.releaseConnection();
             }
         }
-
-
         return "";
     }
 }

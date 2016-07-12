@@ -1,6 +1,7 @@
 language: java
-script:
+before_install:
   - jdk_switcher use oraclejdk8
+install:
   - mvn clean verify
 after_success:
   - mvn clean test jacoco:report coveralls:report
