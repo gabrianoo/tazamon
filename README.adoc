@@ -1,0 +1,7 @@
+image:https://travis-ci.org/gabrianoo/tazamon.svg?branch=master["Build Status", link="https://travis-ci.org/gabrianoo/tazamon"]
+image:https://coveralls.io/repos/github/gabrianoo/tazamon/badge.svg?branch=master["Coverage Status", link="https://coveralls.io/github/gabrianoo/tazamon?branch=master"]
+
+Tazamon
+=======
+
+Tazamon is a synchronization tool that aims to sync all your accounts in harmony (i.e. contacts, calendars ... etc.).
