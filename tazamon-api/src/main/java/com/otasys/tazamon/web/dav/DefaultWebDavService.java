@@ -1,6 +1,8 @@
 package com.otasys.tazamon.web.dav;
 
 import com.otasys.tazamon.xml.XmlConversionService;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
@@ -9,38 +11,34 @@ import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.OptionsMethod;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.IOException;
 import java.net.URI;
+
+import static com.otasys.tazamon.freemarker.FreeMarkerTemplateUtils.processTemplateIntoString;
 
 /**
  * @see <a href="http://blogs.nologin.es/rickyepoderi/index.php?/archives/14-Introducing-CalDAV-Part-I.html">Introducing CalDAV Part-I</a>
  * @see <a href="http://blogs.nologin.es/rickyepoderi/index.php?/archives/15-Introducing-CalDAV-Part-II.html">Introducing CalDAV Part-II</a>
  */
-@Named
 public class DefaultWebDavService implements WebDavService {
 
     private HttpClient httpClient;
-    private VelocityEngine velocityEngine;
+    private Configuration freemarkerConfiguration;
     private XmlConversionService xmlConversionService;
     private HostConfiguration hostConfiguration;
     private static final String SERVER_URI = "https://p01-contacts.icloud.com/";
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWebDavService.class);
 
-    @Inject
     public DefaultWebDavService(
             HttpClient httpClient,
-            VelocityEngine velocityEngine,
+            Configuration freemarkerConfiguration,
             XmlConversionService xmlConversionService
     ) {
         this.httpClient = httpClient;
-        this.velocityEngine = velocityEngine;
+        this.freemarkerConfiguration = freemarkerConfiguration;
         this.xmlConversionService = xmlConversionService;
         this.hostConfiguration = new HostConfiguration();
         String httpsProxyServerUriString = System.getenv("HTTPS_PROXY");
@@ -86,7 +84,7 @@ public class DefaultWebDavService implements WebDavService {
             propFind.addRequestHeader("Authorization", basicAuthToken);
             propFind.setRequestBody(
                     xmlConversionService.loadXmlDocumentFromString(
-                            VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "iCloudPrincipal.vm", "UTF-8", null)
+                            processTemplateIntoString(freemarkerConfiguration.getTemplate("iCloudPrincipal.ftl"), null)
                     )
             );
             httpClient.executeMethod(hostConfiguration, propFind);
@@ -97,6 +95,8 @@ public class DefaultWebDavService implements WebDavService {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Exception Details: ", e);
             }
+        } catch (TemplateException e) {
+            e.printStackTrace();
         } finally {
             if (propFind != null) {
                 propFind.releaseConnection();

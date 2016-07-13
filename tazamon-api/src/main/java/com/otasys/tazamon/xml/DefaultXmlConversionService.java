@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
@@ -16,13 +14,11 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-@Named
 public class DefaultXmlConversionService implements XmlConversionService {
 
     private Transformer transformer;
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWebDavService.class);
 
-    @Inject
     public DefaultXmlConversionService(Transformer transformer) {
         this.transformer = transformer;
     }
