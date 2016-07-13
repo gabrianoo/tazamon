@@ -1,0 +1,7 @@
+## Spring Boot Configuration
+spring:
+  # Freemarker Configuration
+  freemarker:
+    enabled: false          # Disable MVC view resolution for this technology.
+    cache: true             # Enable template caching.
+    charset: UTF-8          # Template encoding.

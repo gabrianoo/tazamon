@@ -19,6 +19,7 @@
     <modules>
         <module>tazamon-configuration</module>
         <module>tazamon-api</module>
+        <module>tazamon-rest</module>
     </modules>
 
     <scm>

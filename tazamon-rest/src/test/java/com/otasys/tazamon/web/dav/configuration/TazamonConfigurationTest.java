@@ -2,6 +2,7 @@ package com.otasys.tazamon.web.dav.configuration;
 
 import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
 import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl;
+import org.apache.commons.httpclient.HttpClient;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,19 +15,27 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-public class W3cXmlConfigurationTest {
+public class TazamonConfigurationTest {
 
-    private W3cXmlConfiguration w3cXmlConfiguration;
+    private TazamonConfiguration tazamonConfiguration;
 
     @Before
     public void setupTest() {
-        w3cXmlConfiguration = new W3cXmlConfiguration();
+        tazamonConfiguration = new TazamonConfiguration();
+    }
+
+    @Test
+    public void givenHttpClientConfigurationWhenProvideHttpClientThenHttpClientShouldReturn() {
+        assertThat(
+                tazamonConfiguration.provideHttpClient(),
+                is(instanceOf(HttpClient.class))
+        );
     }
 
     @Test
     public void givenW3cXmlConfigurationWhenProvideTransformerFactoryThenTransformerFactoryImplShouldReturn() {
         assertThat(
-                w3cXmlConfiguration.provideTransformerFactory(),
+                tazamonConfiguration.provideTransformerFactory(),
                 is(instanceOf(TransformerFactoryImpl.class))
         );
     }
@@ -34,7 +43,7 @@ public class W3cXmlConfigurationTest {
     @Test
     public void givenW3cXmlConfigurationWhenProvideTransformerAndValidTransformerFactoryThenTransformerShouldReturn() throws TransformerConfigurationException {
         assertThat(
-                w3cXmlConfiguration.provideTransformer(w3cXmlConfiguration.provideTransformerFactory()),
+                tazamonConfiguration.provideTransformer(tazamonConfiguration.provideTransformerFactory()),
                 is(instanceOf(TransformerImpl.class))
         );
     }
@@ -43,6 +52,7 @@ public class W3cXmlConfigurationTest {
     public void givenW3cXmlConfigurationWhenProvideTransformerAndInValidTransformerFactoryThenTransformerShouldReturn() throws TransformerConfigurationException {
         TransformerFactory mockTransformerFactory = mock(TransformerFactory.class);
         doThrow(TransformerConfigurationException.class).when(mockTransformerFactory).newTransformer();
-        w3cXmlConfiguration.provideTransformer(mockTransformerFactory);
+        tazamonConfiguration.provideTransformer(mockTransformerFactory);
     }
+
 }
