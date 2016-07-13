@@ -15,6 +15,13 @@
 	
 	<name>Tazamon API</name>
 
+    <scm>
+        <url>https://github.com/gabrianoo/tazamon</url>
+        <connection>scm:git:https://github.com/gabrianoo/tazamon.git</connection>
+        <developerConnection>scm:git:https://github.com/gabrianoo/tazamon.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <dependencies>
         <!-- Spring boot managed dependencies -->
         <dependency>
