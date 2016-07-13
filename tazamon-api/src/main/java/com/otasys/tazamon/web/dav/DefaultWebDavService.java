@@ -1,5 +1,6 @@
 package com.otasys.tazamon.web.dav;
 
+import com.otasys.tazamon.template.FreeMarkerTemplateService;
 import com.otasys.tazamon.xml.XmlConversionService;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -15,9 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
-
-import static com.otasys.tazamon.freemarker.FreeMarkerTemplateUtils.processTemplateIntoString;
 
 /**
  * @see <a href="http://blogs.nologin.es/rickyepoderi/index.php?/archives/14-Introducing-CalDAV-Part-I.html">Introducing CalDAV Part-I</a>
@@ -29,23 +27,22 @@ public class DefaultWebDavService implements WebDavService {
     private Configuration freemarkerConfiguration;
     private XmlConversionService xmlConversionService;
     private HostConfiguration hostConfiguration;
+    private FreeMarkerTemplateService freeMarkerTemplateService;
     private static final String SERVER_URI = "https://p01-contacts.icloud.com/";
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWebDavService.class);
 
     public DefaultWebDavService(
             HttpClient httpClient,
             Configuration freemarkerConfiguration,
-            XmlConversionService xmlConversionService
+            XmlConversionService xmlConversionService,
+            HostConfiguration hostConfiguration,
+            FreeMarkerTemplateService freeMarkerTemplateService
     ) {
         this.httpClient = httpClient;
         this.freemarkerConfiguration = freemarkerConfiguration;
         this.xmlConversionService = xmlConversionService;
-        this.hostConfiguration = new HostConfiguration();
-        String httpsProxyServerUriString = System.getenv("HTTPS_PROXY");
-        if (httpsProxyServerUriString != null && !httpsProxyServerUriString.isEmpty()) {
-            URI httpsProxyServerURI = URI.create(System.getenv("HTTPS_PROXY"));
-            this.hostConfiguration.setProxy(httpsProxyServerURI.getHost(), httpsProxyServerURI.getPort());
-        }
+        this.hostConfiguration = hostConfiguration;
+        this.freeMarkerTemplateService = freeMarkerTemplateService;
     }
 
     @Override
@@ -84,7 +81,10 @@ public class DefaultWebDavService implements WebDavService {
             propFind.addRequestHeader("Authorization", basicAuthToken);
             propFind.setRequestBody(
                     xmlConversionService.loadXmlDocumentFromString(
-                            processTemplateIntoString(freemarkerConfiguration.getTemplate("iCloudPrincipal.ftl"), null)
+                            freeMarkerTemplateService.processTemplateIntoString(
+                                    freemarkerConfiguration.getTemplate("iCloudPrincipal.ftl"),
+                                    null
+                            )
                     )
             );
             httpClient.executeMethod(hostConfiguration, propFind);

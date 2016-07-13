@@ -1,4 +1,4 @@
-package com.otasys.tazamon.freemarker;
+package com.otasys.tazamon.template;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -6,12 +6,9 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.StringWriter;
 
-public abstract class FreeMarkerTemplateUtils {
+public final class FreeMarkerTemplateService {
 
-    public FreeMarkerTemplateUtils() {
-    }
-
-    public static String processTemplateIntoString(Template template, Object model) throws IOException, TemplateException {
+    public String processTemplateIntoString(Template template, Object model) throws IOException, TemplateException {
         StringWriter result = new StringWriter();
         template.process(model, result);
         return result.toString();

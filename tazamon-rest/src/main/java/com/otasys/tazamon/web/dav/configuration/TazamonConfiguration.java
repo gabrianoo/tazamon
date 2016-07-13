@@ -1,9 +1,11 @@
 package com.otasys.tazamon.web.dav.configuration;
 
+import com.otasys.tazamon.template.FreeMarkerTemplateService;
 import com.otasys.tazamon.web.dav.DefaultWebDavService;
 import com.otasys.tazamon.web.dav.WebDavService;
 import com.otasys.tazamon.xml.DefaultXmlConversionService;
 import com.otasys.tazamon.xml.XmlConversionService;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
+import java.net.URI;
 
 @Configuration
 public class TazamonConfiguration {
@@ -62,6 +65,18 @@ public class TazamonConfiguration {
             freemarker.template.Configuration freeMarkerConfiguration,
             XmlConversionService xmlConversionService
     ) {
-        return new DefaultWebDavService(httpClient, freeMarkerConfiguration, xmlConversionService);
+        HostConfiguration hostConfiguration = new HostConfiguration();
+        String httpsProxyServerUriString = System.getenv("HTTPS_PROXY");
+        if (httpsProxyServerUriString != null && !httpsProxyServerUriString.isEmpty()) {
+            URI httpsProxyServerURI = URI.create(System.getenv("HTTPS_PROXY"));
+            hostConfiguration.setProxy(httpsProxyServerURI.getHost(), httpsProxyServerURI.getPort());
+        }
+        return new DefaultWebDavService(
+                httpClient,
+                freeMarkerConfiguration,
+                xmlConversionService,
+                hostConfiguration,
+                new FreeMarkerTemplateService()
+        );
     }
 }
