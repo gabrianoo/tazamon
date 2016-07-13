@@ -4,4 +4,4 @@ image:https://coveralls.io/repos/github/gabrianoo/tazamon/badge.svg?branch=maste
 Tazamon
 =======
 
-Tazamon is a synchronization tool that aims to sync all your accounts in harmony (i.e. contacts, calendars ... etc.).
+Tazamon is a web dav integration API and client(s) to famous providers like iCloud and Gmail and also aims to easy web dav integration with these providers.

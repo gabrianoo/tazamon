@@ -3,115 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.otasys</groupId>
-    <artifactId>tazamon</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
-    <name>Tazamon</name>
-    <description>Tazamon is a synchronization tool that aims to sync all your accounts in harmony (i.e. contacts,
-        calendars ... etc.).
-    </description>
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.5.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.otasys</groupId>
+        <artifactId>tazamon-configuration</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>tazamon-configuration/pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <!-- General Properties -->
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <coveralls.repository.token>0Vh5uqThrLb4N1v3pgC8Qv2fuf2X6ifLq</coveralls.repository.token>
-        <!-- JSRs -->
-        <javax.inject.version>1</javax.inject.version>
-        <!-- 3rd Parties Properties -->
-        <org.mnode.ical4j.version>1.0.7</org.mnode.ical4j.version>
-        <org.apache.jackrabbit.version>2.12.2</org.apache.jackrabbit.version>
-        <!-- Maven Plugins -->
-        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
-    </properties>
+    <artifactId>tazamon</artifactId>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <!-- Spring boot managed dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-        </dependency>
-        <!-- Manually managed dependencies -->
-        <!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>${javax.inject.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j -->
-        <dependency>
-            <groupId>org.mnode.ical4j</groupId>
-            <artifactId>ical4j</artifactId>
-            <version>${org.mnode.ical4j.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.jackrabbit/jackrabbit-webdav -->
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-webdav</artifactId>
-            <version>${org.apache.jackrabbit.version}</version>
-        </dependency>
-        <!-- Testing Dependencies -->
-        <!-- Spring boot testing managed dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <name>Tazamon</name>
+    <description>Tazamon is web dav integration API and client(s) for providers like iCloud and Gmail.</description>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <!-- https://mvnrepository.com/artifact/org.eluder.coveralls/coveralls-maven-plugin -->
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>${coveralls-maven-plugin.version}</version>
-                <configuration>
-                    <repoToken>${coveralls.repository.token}</repoToken>
-                </configuration>
-            </plugin>
-            <!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <modules>
+        <module>tazamon-configuration</module>
+        <module>tazamon-api</module>
+    </modules>
 
 </project>
