@@ -6,7 +6,7 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.StringWriter;
 
-public final class FreeMarkerTemplateService {
+public class FreeMarkerTemplateService {
 
     public String processTemplateIntoString(Template template, Object model) throws IOException, TemplateException {
         StringWriter result = new StringWriter();

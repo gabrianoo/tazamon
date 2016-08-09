@@ -1,7 +1,9 @@
 package com.otasys.tazamon.web.dav.configuration;
 
 import com.otasys.tazamon.template.FreeMarkerTemplateService;
+import com.otasys.tazamon.web.dav.DefaultWebDavHttpMethods;
 import com.otasys.tazamon.web.dav.DefaultWebDavService;
+import com.otasys.tazamon.web.dav.WebDavHttpMethods;
 import com.otasys.tazamon.web.dav.WebDavService;
 import com.otasys.tazamon.xml.DefaultXmlConversionService;
 import com.otasys.tazamon.xml.XmlConversionService;
@@ -60,23 +62,27 @@ public class TazamonConfiguration {
     }
 
     @Bean
-    public WebDavService provideWebDavService(
-            HttpClient httpClient,
-            freemarker.template.Configuration freeMarkerConfiguration,
-            XmlConversionService xmlConversionService
-    ) {
+    public WebDavHttpMethods provideWebDavHttpMethods(HttpClient httpClient) {
         HostConfiguration hostConfiguration = new HostConfiguration();
         String httpsProxyServerUriString = System.getenv("HTTPS_PROXY");
         if (httpsProxyServerUriString != null && !httpsProxyServerUriString.isEmpty()) {
             URI httpsProxyServerURI = URI.create(System.getenv("HTTPS_PROXY"));
             hostConfiguration.setProxy(httpsProxyServerURI.getHost(), httpsProxyServerURI.getPort());
         }
+        return new DefaultWebDavHttpMethods(httpClient, hostConfiguration);
+    }
+
+    @Bean
+    public WebDavService provideWebDavService(
+            freemarker.template.Configuration freeMarkerConfiguration,
+            XmlConversionService xmlConversionService,
+            WebDavHttpMethods webDavHttpMethods
+    ) {
         return new DefaultWebDavService(
-                httpClient,
                 freeMarkerConfiguration,
                 xmlConversionService,
-                hostConfiguration,
-                new FreeMarkerTemplateService()
+                new FreeMarkerTemplateService(),
+                webDavHttpMethods
         );
     }
 }
