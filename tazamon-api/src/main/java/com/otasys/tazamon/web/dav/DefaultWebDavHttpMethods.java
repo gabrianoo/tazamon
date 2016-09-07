@@ -20,7 +20,7 @@ public class DefaultWebDavHttpMethods implements WebDavHttpMethods {
     }
 
     @Override
-    public DavMethodBase requestWithHeaders(DavMethodBase davMethodBase) {
+    public DavMethodBase basicRequest(DavMethodBase davMethodBase) {
         try {
             httpClient.executeMethod(hostConfiguration, davMethodBase);
             if (LOGGER.isDebugEnabled()) {

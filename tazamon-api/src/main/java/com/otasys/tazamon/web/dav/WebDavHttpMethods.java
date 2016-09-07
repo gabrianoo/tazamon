@@ -4,5 +4,5 @@ import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
 
 public interface WebDavHttpMethods {
 
-    DavMethodBase requestWithHeaders(DavMethodBase davMethodBase);
+    DavMethodBase basicRequest(DavMethodBase davMethodBase);
 }
