@@ -16,7 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -73,16 +77,30 @@ public class TazamonConfiguration {
     }
 
     @Bean
+    public JAXBContext provideJaxb2Marshaller() {
+        Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+        jaxb2Marshaller.setPackagesToScan("com.otasys.tazamon");
+        return jaxb2Marshaller.getJaxbContext();
+    }
+
+    @Bean
+    public Unmarshaller provideUnmarshaller(JAXBContext jaxbContext) throws JAXBException {
+        return jaxbContext.createUnmarshaller();
+    }
+
+    @Bean
     public WebDavService provideWebDavService(
             freemarker.template.Configuration freeMarkerConfiguration,
             XmlConversionService xmlConversionService,
-            WebDavHttpMethods webDavHttpMethods
+            WebDavHttpMethods webDavHttpMethods,
+            Unmarshaller unmarshaller
     ) {
         return new DefaultWebDavService(
                 freeMarkerConfiguration,
                 xmlConversionService,
                 new FreeMarkerTemplateService(),
-                webDavHttpMethods
+                webDavHttpMethods,
+                unmarshaller
         );
     }
 }
