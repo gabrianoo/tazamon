@@ -1,0 +1,12 @@
+###############################
+# Our Custom Web Dav Properties
+###############################
+## iCloud Web Dav Properties
+web:
+  dav:
+    apple:
+      calendarServer: https://caldav.icloud.com/
+      cardServer: https://contacts.icloud.com/
+    google:
+      calendarServer: https://caldav.icloud.com/
+      cardServer: https://contacts.icloud.com/
