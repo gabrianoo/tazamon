@@ -1,5 +1,7 @@
 package com.tazamon.dav.configuration;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
@@ -49,5 +51,15 @@ public class TazamonConfiguration {
     @Bean
     public Marshaller provideMarshaller(Jaxb2Marshaller jaxb2Marshaller) throws JAXBException {
         return jaxb2Marshaller.getJaxbContext().createMarshaller();
+    }
+
+    /**
+     * Create apache HTTP Client.
+     *
+     * @return the default apache {@link HttpClient}.
+     */
+    @Bean
+    public HttpClient provideHttpClient() {
+        return HttpClients.createDefault();
     }
 }

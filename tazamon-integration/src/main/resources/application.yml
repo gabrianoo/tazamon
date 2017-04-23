@@ -7,6 +7,8 @@ web:
     apple:
       calendarServer: https://caldav.icloud.com/
       cardServer: https://contacts.icloud.com/
+      ftl:
+        currentUserPrincipal: web/apple/CurrentUserPrincipal.ftl
     google:
       calendarServer: https://caldav.icloud.com/
       cardServer: https://contacts.icloud.com/

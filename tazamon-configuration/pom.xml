@@ -32,7 +32,7 @@
         <!-- JSRs -->
         <javax.inject.version>1</javax.inject.version>
         <!-- 3rd Parties Properties -->
-        <org.apache.jackrabbit.version>2.12.2</org.apache.jackrabbit.version>
+        <org.apache.jackrabbit.version>2.14.0</org.apache.jackrabbit.version>
         <org.projectlombok.version>1.16.16</org.projectlombok.version>
         <!-- Maven Plugins -->
         <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>

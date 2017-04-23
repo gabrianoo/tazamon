@@ -15,4 +15,11 @@ public class AppleWebDavProperties {
 
     private String calendarServer;
     private String cardServer;
+    private Ftl ftl;
+
+    @Data
+    public static class Ftl {
+
+        private String currentUserPrincipal;
+    }
 }

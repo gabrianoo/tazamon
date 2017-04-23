@@ -7,8 +7,9 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.jackrabbit.webdav.client.methods.XmlRequestEntity;
-import org.w3c.dom.Document;
 
 import java.io.IOException;
 
@@ -26,7 +27,7 @@ public class RequestWrapper {
     private static final String SPACE = " ";
     private static final String BASIC = "Basic";
     private String base64EncodeAuthToken;
-    private RequestEntity requestEntity;
+    private HttpEntity httpEntity;
     private String serverUrl;
 
     /**
@@ -35,7 +36,7 @@ public class RequestWrapper {
     public static class RequestWrapperBuilder {
 
         private String base64EncodeAuthToken;
-        private RequestEntity requestEntity;
+        private HttpEntity httpEntity;
         private String serverUrl;
 
         private RequestWrapperBuilder() {
@@ -62,9 +63,9 @@ public class RequestWrapper {
          *
          * @param requestBody used as the request body.
          */
-        public RequestWrapperBuilder requestEntity(Document requestBody) {
+        public RequestWrapperBuilder httpEntity(String requestBody) {
             try {
-                this.requestEntity = new XmlRequestEntity(requestBody);
+                this.httpEntity = new StringEntity(requestBody);
             } catch (IOException e) {
                 log.error("", e);
             }
@@ -87,7 +88,7 @@ public class RequestWrapper {
          * @return {@link RequestWrapper} ready to be used by {@link WebDavRequest} implementations.
          */
         public RequestWrapper build() {
-            return new RequestWrapper(base64EncodeAuthToken, requestEntity, serverUrl);
+            return new RequestWrapper(base64EncodeAuthToken, httpEntity, serverUrl);
         }
     }
 
