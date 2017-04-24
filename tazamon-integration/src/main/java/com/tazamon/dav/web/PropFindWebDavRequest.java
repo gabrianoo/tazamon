@@ -33,19 +33,20 @@ public class PropFindWebDavRequest implements WebDavRequest {
     }
 
     @Override
-    public Optional<DavResponse> submitRequest(RequestWrapper requestWrapper) {
+    public Optional<DavResponse> submitRequest(DavRequest davRequest) {
         Optional<DavResponse> responseWrapperOptional = Optional.empty();
         HttpPropfind httpPropfind;
         try {
-            httpPropfind = new HttpPropfind(requestWrapper.getServerUrl(), PROPFIND_ALL_PROP, DEPTH_0);
-            httpPropfind.addHeader(AUTHORIZATION, requestWrapper.getBase64EncodeAuthToken());
-            httpPropfind.setEntity(requestWrapper.getHttpEntity());
+            httpPropfind = new HttpPropfind(davRequest.getServerUrl(), PROPFIND_ALL_PROP, DEPTH_0);
+            httpPropfind.addHeader(AUTHORIZATION, davRequest.getBase64EncodeAuthToken());
+            httpPropfind.setEntity(davRequest.getHttpEntity());
             HttpResponse httpResponse = httpClient.execute(httpPropfind);
             MultiStatusResponse[] multiStatusResponses
                     = httpPropfind.getResponseBodyAsMultiStatus(httpResponse).getResponses();
             if (multiStatusResponses.length >= 1) {
                 DavPropertySet davPropertySet = multiStatusResponses[0].getProperties(SC_OK);
-                responseWrapperOptional = Optional.of(DavResponse.builder().davPropertySet(davPropertySet).build());
+                responseWrapperOptional = Optional.of(
+                        DavResponse.builder().davPropertySet(davPropertySet).davRequest(davRequest).build());
             }
         } catch (DavException | IOException e) {
             log.error("", e);

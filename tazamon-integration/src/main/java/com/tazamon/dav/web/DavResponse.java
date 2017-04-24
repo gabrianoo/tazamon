@@ -3,6 +3,7 @@ package com.tazamon.dav.web;
 import com.tazamon.dav.common.XmlProcessor;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.jackrabbit.webdav.property.DavProperty;
@@ -16,12 +17,14 @@ import java.util.Optional;
  * The goal of this {@link DavResponse} is to wrap the Web Dav response for safe refactoring/maintaining later.
  */
 @Slf4j
+@Getter
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
 public class DavResponse {
 
     private DavPropertySet davPropertySet;
+    private DavRequest davRequest;
 
     public Optional<Element> lookUpDavProperty(String davPropertyName) {
         DavProperty<?> davProperty = davPropertySet.get(davPropertyName);
@@ -43,6 +46,7 @@ public class DavResponse {
     public static class ResponseWrapperBuilder {
 
         private DavPropertySet davPropertySet;
+        private DavRequest davRequest;
 
         private ResponseWrapperBuilder() {
         }
@@ -58,12 +62,22 @@ public class DavResponse {
         }
 
         /**
+         * This method is used to set the {@link DavRequest} to extract original request data.
+         *
+         * @param davRequest used to set the {@link DavRequest}
+         */
+        public ResponseWrapperBuilder davRequest(DavRequest davRequest) {
+            this.davRequest = davRequest;
+            return this;
+        }
+
+        /**
          * Build the {@link DavResponse} using the provided data in the builder.
          *
          * @return {@link DavResponse} ready to be used by {@link WebDavRequest} implementations.
          */
         public DavResponse build() {
-            return new DavResponse(davPropertySet);
+            return new DavResponse(davPropertySet, davRequest);
         }
     }
 

@@ -21,5 +21,6 @@ public class AppleWebDavProperties {
     public static class Ftl {
 
         private String currentUserPrincipal;
+        private String displayName;
     }
 }

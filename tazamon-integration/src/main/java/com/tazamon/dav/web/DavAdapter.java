@@ -7,7 +7,7 @@ import java.util.Optional;
  *
  * @param <T> The target data type required for adaptation.
  */
-public interface DavResponseAdapter<T> {
+public interface DavAdapter<T> {
 
     /**
      * Convert the {@link DavResponse} to meaningful entity object.

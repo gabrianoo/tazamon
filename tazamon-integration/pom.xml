@@ -10,10 +10,10 @@
         <relativePath>../tazamon-configuration/pom.xml</relativePath>
     </parent>
 
-    <artifactId>tazamon-api</artifactId>
+    <artifactId>tazamon-integration</artifactId>
     <packaging>jar</packaging>
 
-    <name>Tazamon API</name>
+    <name>Tazamon Integration</name>
 
     <scm>
         <url>https://github.com/gabrianoo/tazamon</url>

@@ -14,14 +14,14 @@ import org.apache.jackrabbit.webdav.client.methods.XmlRequestEntity;
 import java.io.IOException;
 
 /**
- * The goal of this {@link RequestWrapper} is to wrap the Web Dav request for safe refactoring/maintaining later.
+ * The goal of this {@link DavRequest} is to wrap the Web Dav request for safe refactoring/maintaining later.
  */
 @Slf4j
 @Getter
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class RequestWrapper {
+public class DavRequest {
 
     private static final String COLON = ":";
     private static final String SPACE = " ";
@@ -31,7 +31,7 @@ public class RequestWrapper {
     private String serverUrl;
 
     /**
-     * A builder class for {@link RequestWrapper}.
+     * A builder class for {@link DavRequest}.
      */
     public static class RequestWrapperBuilder {
 
@@ -55,6 +55,16 @@ public class RequestWrapper {
             if (log.isDebugEnabled()) {
                 log.debug("Base64 encoded auth string: [{}]", base64EncodeAuthToken);
             }
+            return this;
+        }
+
+        /**
+         * This method is used if you already have the base64 encoded basic authentication token.
+         *
+         * @param base64EncodeAuthToken the base64EncodeAuthToken used in authentication.
+         */
+        public RequestWrapperBuilder base64EncodeAuthToken(String base64EncodeAuthToken) {
+            this.base64EncodeAuthToken = base64EncodeAuthToken;
             return this;
         }
 
@@ -83,17 +93,17 @@ public class RequestWrapper {
         }
 
         /**
-         * Build the {@link RequestWrapper} using the provided data in the builder.
+         * Build the {@link DavRequest} using the provided data in the builder.
          *
-         * @return {@link RequestWrapper} ready to be used by {@link WebDavRequest} implementations.
+         * @return {@link DavRequest} ready to be used by {@link WebDavRequest} implementations.
          */
-        public RequestWrapper build() {
-            return new RequestWrapper(base64EncodeAuthToken, httpEntity, serverUrl);
+        public DavRequest build() {
+            return new DavRequest(base64EncodeAuthToken, httpEntity, serverUrl);
         }
     }
 
     /**
-     * Provide a new {@link RequestWrapperBuilder} to assist in building a {@link RequestWrapper} instance ready to be
+     * Provide a new {@link RequestWrapperBuilder} to assist in building a {@link DavRequest} instance ready to be
      * used by {@link WebDavRequest} implementations.
      *
      * @return new empty instance of {@link RequestWrapperBuilder}.
