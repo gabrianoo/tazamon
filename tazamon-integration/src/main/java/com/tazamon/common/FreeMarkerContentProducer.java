@@ -1,4 +1,4 @@
-package com.tazamon.dav.common;
+package com.tazamon.common;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

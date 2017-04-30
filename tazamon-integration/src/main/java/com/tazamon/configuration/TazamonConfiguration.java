@@ -1,4 +1,4 @@
-package com.tazamon.dav.configuration;
+package com.tazamon.configuration;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -25,7 +25,7 @@ public class TazamonConfiguration {
     @Bean
     public Jaxb2Marshaller provideJaxb2Marshaller() {
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        jaxb2Marshaller.setPackagesToScan("com.tazamon.dav");
+        jaxb2Marshaller.setPackagesToScan("com.tazamon");
         return jaxb2Marshaller;
     }
 

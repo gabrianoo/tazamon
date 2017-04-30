@@ -18,6 +18,7 @@
 
     <modules>
         <module>tazamon-configuration</module>
+        <module>tazamon-api</module>
         <module>tazamon-integration</module>
     </modules>
 

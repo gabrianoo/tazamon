@@ -1,4 +1,4 @@
-package com.tazamon.dav.cal;
+package com.tazamon.calendar;
 
 import lombok.*;
 

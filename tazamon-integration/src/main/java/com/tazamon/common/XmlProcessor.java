@@ -1,4 +1,4 @@
-package com.tazamon.dav.common;
+package com.tazamon.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
@@ -16,7 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.util.Optional;
 
 /**
- * This is an extra layer of abstraction (I don't know whether it is needed or no) to wrap the {@link Marshaller} and
+ * This is an extra layer of api (I don't know whether it is needed or no) to wrap the {@link Marshaller} and
  * the {@link Unmarshaller}.
  * The final goal is to avoid working with XML Documents.
  */

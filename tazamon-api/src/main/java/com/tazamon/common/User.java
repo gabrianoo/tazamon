@@ -1,6 +1,6 @@
-package com.tazamon.dav.web;
+package com.tazamon.common;
 
-import com.tazamon.dav.cal.Calendar;
+import com.tazamon.calendar.Calendar;
 import lombok.*;
 
 import javax.xml.bind.annotation.*;
