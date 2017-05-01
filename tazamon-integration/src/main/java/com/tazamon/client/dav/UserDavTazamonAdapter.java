@@ -1,4 +1,4 @@
-package com.tazamon.client.http;
+package com.tazamon.client.dav;
 
 import com.tazamon.common.User;
 
@@ -8,13 +8,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Named
-public class UserHttpTazamonAdapter implements HttpTazamonAdapter<Optional<User>> {
+public class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<User>> {
 
     private static final Pattern PRINCIPAL_PTRN = Pattern.compile("([0-9]+)");
 
     @Override
-    public Optional<User> adapt(HttpTazamonResponse httpTazamonResponse) {
-        return httpTazamonResponse.getMultiStatus().getResponse()
+    public Optional<User> adapt(DavTazamonResponse davTazamonResponse) {
+        return davTazamonResponse.getMultiStatus().getResponse()
                 .stream().findFirst().flatMap(
                         response -> {
                             Optional<User> userOptional = Optional.empty();
@@ -25,8 +25,8 @@ public class UserHttpTazamonAdapter implements HttpTazamonAdapter<Optional<User>
                                         User.builder()
                                                 .principal(parsePrincipal(currentUserPrincipal.getHref()))
                                                 .base64EncodeAuthToken(
-                                                        httpTazamonResponse
-                                                                .getHttpTazamonRequest().getBase64EncodeAuthToken()
+                                                        davTazamonResponse
+                                                                .getDavTazamonRequest().getBase64EncodeAuthToken()
                                                 )
                                                 .build()
                                 );

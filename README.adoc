@@ -11,4 +11,4 @@ THIRD-PARTY LIBRARIES USED
 
 Libraries used by Tazamon:
 
-* [Project Lombok](http://projectlombok.org/) – [MIT License](http://opensource.org/licenses/mit-license.php)
+* http://projectlombok.org/[Project Lombok] – http://opensource.org/licenses/mit-license.php[MIT License]

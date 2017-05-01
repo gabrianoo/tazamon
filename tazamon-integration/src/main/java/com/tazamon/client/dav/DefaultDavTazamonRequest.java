@@ -1,15 +1,15 @@
-package com.tazamon.client.http;
+package com.tazamon.client.dav;
 
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
 /**
- * The goal of this {@link DefaultHttpTazamonRequest} is to wrap the Web Dav request for safe refactoring/maintaining later.
+ * The goal of this {@link DefaultDavTazamonRequest} is to wrap the Web Dav request for safe refactoring/maintaining later.
  */
 @Slf4j
 @Value
-public class DefaultHttpTazamonRequest implements HttpTazamonRequest {
+public class DefaultDavTazamonRequest implements DavTazamonRequest {
 
     final String COLON = ":";
     final String SPACE = " ";
@@ -18,13 +18,13 @@ public class DefaultHttpTazamonRequest implements HttpTazamonRequest {
     String requestBody;
     String serverUrl;
 
-    public DefaultHttpTazamonRequest(String base64EncodeAuthToken, String requestBody, String serverUrl) {
+    public DefaultDavTazamonRequest(String base64EncodeAuthToken, String requestBody, String serverUrl) {
         this.base64EncodeAuthToken = base64EncodeAuthToken;
         this.requestBody = requestBody;
         this.serverUrl = serverUrl;
     }
 
-    public DefaultHttpTazamonRequest(String email, String password, String requestBody, String serverUrl) {
+    public DefaultDavTazamonRequest(String email, String password, String requestBody, String serverUrl) {
         this.base64EncodeAuthToken = base64EncodeAuthToken(email, password);
         this.requestBody = requestBody;
         this.serverUrl = serverUrl;

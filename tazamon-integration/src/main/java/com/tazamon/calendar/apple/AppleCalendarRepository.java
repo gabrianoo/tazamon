@@ -2,9 +2,9 @@ package com.tazamon.calendar.apple;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
-import com.tazamon.client.http.DefaultHttpTazamonRequest;
-import com.tazamon.client.http.HttpTazamonAdapter;
-import com.tazamon.client.http.HttpTazamonRequester;
+import com.tazamon.client.dav.DefaultDavTazamonRequest;
+import com.tazamon.client.dav.DavTazamonAdapter;
+import com.tazamon.client.dav.DavTazamonExecutor;
 import com.tazamon.common.FreeMarkerContentProducer;
 import com.tazamon.common.User;
 import com.tazamon.configuration.AppleWebDavProperties;
@@ -18,21 +18,21 @@ import java.util.Optional;
 @Named
 public class AppleCalendarRepository implements CalendarRepository {
 
-    private final HttpTazamonRequester httpTazamonRequester;
+    private final DavTazamonExecutor davTazamonExecutor;
     private final FreeMarkerContentProducer freeMarkerContentProducer;
-    private final HttpTazamonAdapter<List<Calendar>> calendarHttpTazamonAdapter;
+    private final DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter;
     private final AppleWebDavProperties appleWebDavProperties;
 
     @Inject
     public AppleCalendarRepository(
-            HttpTazamonRequester httpTazamonRequester,
+            DavTazamonExecutor davTazamonExecutor,
             FreeMarkerContentProducer freeMarkerContentProducer,
-            HttpTazamonAdapter<List<Calendar>> calendarHttpTazamonAdapter,
+            DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter,
             AppleWebDavProperties appleWebDavProperties
     ) {
-        this.httpTazamonRequester = httpTazamonRequester;
+        this.davTazamonExecutor = davTazamonExecutor;
         this.freeMarkerContentProducer = freeMarkerContentProducer;
-        this.calendarHttpTazamonAdapter = calendarHttpTazamonAdapter;
+        this.calendarDavTazamonAdapter = calendarDavTazamonAdapter;
         this.appleWebDavProperties = appleWebDavProperties;
     }
 
@@ -40,7 +40,7 @@ public class AppleCalendarRepository implements CalendarRepository {
     public List<Calendar> findAllCalendars(User user) {
         Optional<List<Calendar>> calendars = freeMarkerContentProducer
                 .processTemplateIntoOptionalString(appleWebDavProperties.getFtl().getDisplayName(), null)
-                .map(document -> new DefaultHttpTazamonRequest(
+                .map(document -> new DefaultDavTazamonRequest(
                         user.getBase64EncodeAuthToken(),
                         document,
                         String.join(
@@ -51,8 +51,8 @@ public class AppleCalendarRepository implements CalendarRepository {
                         )
 
                 ))
-                .flatMap(httpTazamonRequester::submitRequest)
-                .map(calendarHttpTazamonAdapter::adapt);
+                .flatMap(davTazamonExecutor::execute)
+                .map(calendarDavTazamonAdapter::adapt);
         return calendars.orElse(Collections.emptyList());
     }
 }

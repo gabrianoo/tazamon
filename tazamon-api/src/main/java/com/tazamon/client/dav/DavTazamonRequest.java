@@ -1,6 +1,6 @@
-package com.tazamon.client.http;
+package com.tazamon.client.dav;
 
-public interface HttpTazamonRequest {
+public interface DavTazamonRequest {
 
     String getBase64EncodeAuthToken();
 
