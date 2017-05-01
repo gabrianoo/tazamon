@@ -63,6 +63,10 @@
             <artifactId>tazamon-api</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency><!-- Used for standardising DI framework -->
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
         <dependency><!-- Used for HTTP communications -->
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-webdav</artifactId>
