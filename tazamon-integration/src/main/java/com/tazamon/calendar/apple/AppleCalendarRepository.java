@@ -1,4 +1,4 @@
-package com.tazamon.cal.apple;
+package com.tazamon.calendar.apple;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;

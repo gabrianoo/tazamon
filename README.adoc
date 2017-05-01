@@ -1,17 +1,14 @@
 image:https://travis-ci.org/gabrianoo/tazamon.svg?branch=master["Build Status", link="https://travis-ci.org/gabrianoo/tazamon"]
 image:https://coveralls.io/repos/github/gabrianoo/tazamon/badge.svg?branch=master["Coverage Status", link="https://coveralls.io/github/gabrianoo/tazamon?branch=master"]
 
-## Tazamon
+TAZAMON
+-------
 
 Tazamon is a web dav integration API and client(s) to famous providers like iCloud and Gmail and also aims to easy web dav integration with these providers.
 
-### Design
+THIRD-PARTY LIBRARIES USED
+--------------------------
 
-API Design
+Libraries used by Tazamon:
 
-I replicated the design concepts in javax.servlet
-
-- TazamonRequest is equivalent to ServletRequest
-- HttpTazamonRequest is equivalent to HttpServletRequest
-
-and the same for response.
+* [Project Lombok](http://projectlombok.org/) – [MIT License](http://opensource.org/licenses/mit-license.php)

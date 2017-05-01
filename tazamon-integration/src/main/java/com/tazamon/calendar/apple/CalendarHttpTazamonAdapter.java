@@ -1,4 +1,4 @@
-package com.tazamon.cal.apple;
+package com.tazamon.calendar.apple;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.client.http.DisplayName;
@@ -25,7 +25,7 @@ public class CalendarHttpTazamonAdapter implements HttpTazamonAdapter<List<Calen
                             if (propertyType instanceof DisplayName) {
                                 DisplayName displayName = ((DisplayName) propertyType);
                                 return Calendar.builder()
-                                        .displayName(displayName.getValue())
+                                        .name(displayName.getValue())
                                         .build();
                             }
                             return Calendar.builder().build();

@@ -9,8 +9,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode
-class Contact {
+public class Contact {
 
     private String name;
-    private String mobileNumber;
 }

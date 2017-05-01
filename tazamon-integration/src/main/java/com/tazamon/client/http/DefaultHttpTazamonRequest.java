@@ -1,9 +1,6 @@
 package com.tazamon.client.http;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
@@ -11,18 +8,21 @@ import org.apache.commons.codec.binary.Base64;
  * The goal of this {@link DefaultHttpTazamonRequest} is to wrap the Web Dav request for safe refactoring/maintaining later.
  */
 @Slf4j
-@Getter
-@ToString
-@EqualsAndHashCode
-@AllArgsConstructor
+@Value
 public class DefaultHttpTazamonRequest implements HttpTazamonRequest {
 
-    private static final String COLON = ":";
-    private static final String SPACE = " ";
-    private static final String BASIC = "Basic";
-    private String base64EncodeAuthToken;
-    private String requestBody;
-    private String serverUrl;
+    final String COLON = ":";
+    final String SPACE = " ";
+    final String BASIC = "Basic";
+    String base64EncodeAuthToken;
+    String requestBody;
+    String serverUrl;
+
+    public DefaultHttpTazamonRequest(String base64EncodeAuthToken, String requestBody, String serverUrl) {
+        this.base64EncodeAuthToken = base64EncodeAuthToken;
+        this.requestBody = requestBody;
+        this.serverUrl = serverUrl;
+    }
 
     public DefaultHttpTazamonRequest(String email, String password, String requestBody, String serverUrl) {
         this.base64EncodeAuthToken = base64EncodeAuthToken(email, password);

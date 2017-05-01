@@ -25,7 +25,7 @@ public class TazamonConfiguration {
     @Bean
     public Jaxb2Marshaller provideJaxb2Marshaller() {
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        jaxb2Marshaller.setPackagesToScan("com.tazamon");
+        jaxb2Marshaller.setPackagesToScan("com.tazamon.client");
         return jaxb2Marshaller;
     }
 

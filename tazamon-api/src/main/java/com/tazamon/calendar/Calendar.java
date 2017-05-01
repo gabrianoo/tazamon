@@ -11,5 +11,5 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Calendar {
 
-    private String displayName;
+    private String name;
 }
