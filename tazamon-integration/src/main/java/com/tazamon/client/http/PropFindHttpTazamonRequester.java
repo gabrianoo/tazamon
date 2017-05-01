@@ -1,22 +1,22 @@
 package com.tazamon.client.http;
 
+import com.tazamon.common.XmlProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.entity.StringEntity;
 import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.client.methods.HttpPropfind;
-import org.apache.jackrabbit.webdav.property.DavPropertySet;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.apache.commons.httpclient.HttpStatus.SC_OK;
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.jackrabbit.webdav.DavConstants.DEPTH_0;
+import static org.apache.jackrabbit.webdav.DavConstants.DEPTH_1;
 import static org.apache.jackrabbit.webdav.DavConstants.PROPFIND_ALL_PROP;
 
 /**
@@ -27,10 +27,15 @@ import static org.apache.jackrabbit.webdav.DavConstants.PROPFIND_ALL_PROP;
 public class PropFindHttpTazamonRequester implements HttpTazamonRequester {
 
     private final HttpClient httpClient;
+    private final XmlProcessor xmlProcessor;
 
     @Inject
-    public PropFindHttpTazamonRequester(HttpClient httpClient) {
+    public PropFindHttpTazamonRequester(
+            HttpClient httpClient,
+            XmlProcessor xmlProcessor
+    ) {
         this.httpClient = httpClient;
+        this.xmlProcessor = xmlProcessor;
     }
 
     @Override
@@ -38,17 +43,16 @@ public class PropFindHttpTazamonRequester implements HttpTazamonRequester {
         Optional<HttpTazamonResponse> responseWrapperOptional = Optional.empty();
         HttpPropfind httpPropfind;
         try {
-            httpPropfind = new HttpPropfind(httpTazamonRequest.getServerUrl(), PROPFIND_ALL_PROP, DEPTH_0);
+            httpPropfind = new HttpPropfind(httpTazamonRequest.getServerUrl(), PROPFIND_ALL_PROP, DEPTH_1);
             httpPropfind.addHeader(AUTHORIZATION, httpTazamonRequest.getBase64EncodeAuthToken());
             httpPropfind.setEntity(new StringEntity(httpTazamonRequest.getRequestBody()));
             HttpResponse httpResponse = httpClient.execute(httpPropfind);
-            MultiStatusResponse[] multiStatusResponses
-                    = httpPropfind.getResponseBodyAsMultiStatus(httpResponse).getResponses();
-            if (multiStatusResponses.length >= 1) {
-                DavPropertySet davPropertySet = multiStatusResponses[0].getProperties(SC_OK);
-                responseWrapperOptional = Optional.of(new DefaultHttpTazamonResponse(davPropertySet, httpTazamonRequest));
-            }
-        } catch (DavException | IOException e) {
+            MultiStatus multiStatus = xmlProcessor.fromXml(
+                    httpPropfind.getResponseBodyAsMultiStatus(httpResponse).toXml(XmlProcessor.buildXmlNode()),
+                    MultiStatus.class
+            );
+            responseWrapperOptional = Optional.of(new DefaultHttpTazamonResponse(multiStatus, httpTazamonRequest));
+        } catch (JAXBException | ParserConfigurationException | DavException | IOException e) {
             log.error("", e);
         }
         return responseWrapperOptional;

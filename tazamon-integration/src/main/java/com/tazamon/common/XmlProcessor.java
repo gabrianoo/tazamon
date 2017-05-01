@@ -39,17 +39,13 @@ public class XmlProcessor {
      * @param t   the entity to be converted to the desired XML.
      * @param <T> the generic data type of the converted entity.
      * @return an {@link Optional} XML {@link Document} representing the desired output.
+     * @throws JAXBException                if the parsing failed for any reason.
+     * @throws ParserConfigurationException if building the XML node failed for any reason.
      */
-    public <T> Optional<Document> toXml(T t) {
-        Optional<Document> nodeOptional = Optional.empty();
-        try {
-            Document xmlNode = buildXmlNode();
-            marshaller.marshal(t, xmlNode);
-            nodeOptional = Optional.of(xmlNode);
-        } catch (JAXBException | ParserConfigurationException e) {
-            log.error("", e);
-        }
-        return nodeOptional;
+    public <T> Document toXml(T t) throws JAXBException, ParserConfigurationException {
+        Document xmlNode = buildXmlNode();
+        marshaller.marshal(t, xmlNode);
+        return xmlNode;
     }
 
     /**
@@ -58,17 +54,12 @@ public class XmlProcessor {
      * @param node         to be converted to the required entity.
      * @param declaredType the type of the required entity.
      * @param <T>          the generic data type of the required entity.
-     * @return an {@link Optional} entity representing the desired output.
+     * @return an entity representing the desired output.
+     * @throws JAXBException if the parsing failed for any reason.
      */
-    public <T> Optional<T> fromXml(Node node, Class<T> declaredType) {
-        Optional<T> typeOptional = Optional.empty();
-        try {
-            JAXBElement<T> jaxbElement = unmarshaller.unmarshal(node, declaredType);
-            typeOptional = Optional.ofNullable(jaxbElement.getValue());
-        } catch (JAXBException e) {
-            log.error("", e);
-        }
-        return typeOptional;
+    public <T> T fromXml(Node node, Class<T> declaredType) throws JAXBException {
+        JAXBElement<T> jaxbElement = unmarshaller.unmarshal(node, declaredType);
+        return jaxbElement.getValue();
     }
 
     /**

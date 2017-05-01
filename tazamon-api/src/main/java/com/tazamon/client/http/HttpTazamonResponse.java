@@ -1,8 +1,8 @@
 package com.tazamon.client.http;
 
-public interface HttpTazamonResponse<P> {
+public interface HttpTazamonResponse {
 
-    P getPropertySet();
+    MultiStatus getMultiStatus();
 
     HttpTazamonRequest getHttpTazamonRequest();
 }

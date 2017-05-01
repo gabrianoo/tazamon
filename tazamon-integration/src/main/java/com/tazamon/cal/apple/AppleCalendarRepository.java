@@ -8,11 +8,9 @@ import com.tazamon.client.http.HttpTazamonRequester;
 import com.tazamon.common.FreeMarkerContentProducer;
 import com.tazamon.common.User;
 import com.tazamon.configuration.AppleWebDavProperties;
-import org.apache.jackrabbit.webdav.property.DavPropertySet;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,14 +20,14 @@ public class AppleCalendarRepository implements CalendarRepository {
 
     private final HttpTazamonRequester httpTazamonRequester;
     private final FreeMarkerContentProducer freeMarkerContentProducer;
-    private final HttpTazamonAdapter<List<Calendar>, DavPropertySet> calendarHttpTazamonAdapter;
+    private final HttpTazamonAdapter<List<Calendar>> calendarHttpTazamonAdapter;
     private final AppleWebDavProperties appleWebDavProperties;
 
     @Inject
     public AppleCalendarRepository(
             HttpTazamonRequester httpTazamonRequester,
             FreeMarkerContentProducer freeMarkerContentProducer,
-            HttpTazamonAdapter<List<Calendar>, DavPropertySet> calendarHttpTazamonAdapter,
+            HttpTazamonAdapter<List<Calendar>> calendarHttpTazamonAdapter,
             AppleWebDavProperties appleWebDavProperties
     ) {
         this.httpTazamonRequester = httpTazamonRequester;
@@ -45,7 +43,12 @@ public class AppleCalendarRepository implements CalendarRepository {
                 .map(document -> new DefaultHttpTazamonRequest(
                         user.getBase64EncodeAuthToken(),
                         document,
-                        appleWebDavProperties.getCardServer()
+                        String.join(
+                                "",
+                                appleWebDavProperties.getCalendarServer(),
+                                user.getPrincipal(),
+                                "/calendars"
+                        )
 
                 ))
                 .flatMap(httpTazamonRequester::submitRequest)

@@ -1,20 +1,15 @@
 package com.tazamon.calendar;
 
-import lombok.*;
-
-import javax.xml.bind.annotation.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Calendar {
 
-    @XmlTransient
-    private String href;
-    @XmlElement(name = "displayname", namespace = "DAV:")
     private String displayName;
 }
