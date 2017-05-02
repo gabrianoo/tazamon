@@ -4,6 +4,7 @@ import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
 import com.tazamon.common.TazamonAbstractFactory;
 import com.tazamon.common.User;
+import com.tazamon.configuration.AppleWebDavProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,7 +30,10 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         Optional<User> user = appleTazamonAbstractFactory
-                .provideUser("YOUR EMAIL", "YOUR PASSWORD");
+                .provideUser(
+                        "YOUR EMAIL",
+                        "YOUR PASSWORD"
+                );
         user.ifPresent(u -> log.info("{}", u));
         if (user.isPresent()) {
             List<Calendar> calendars = appleCalendarRepository.findAllCalendars(user.get());

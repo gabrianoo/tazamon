@@ -1,5 +1,9 @@
-package com.tazamon.client.dav;
+package com.tazamon.client.dav.common;
 
+import com.tazamon.client.dav.xml.CurrentUserPrincipal;
+import com.tazamon.client.dav.DavTazamonAdapter;
+import com.tazamon.client.dav.DavTazamonResponse;
+import com.tazamon.client.dav.xml.PropertyType;
 import com.tazamon.common.User;
 
 import javax.inject.Named;
@@ -8,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Named
-public class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<User>> {
+public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<User>> {
 
     private static final Pattern PRINCIPAL_PTRN = Pattern.compile("([0-9]+)");
 

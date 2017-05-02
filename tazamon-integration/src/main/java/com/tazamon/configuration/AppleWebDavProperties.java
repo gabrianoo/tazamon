@@ -1,5 +1,6 @@
 package com.tazamon.configuration;
 
+import com.tazamon.common.ServerProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,16 +12,8 @@ import javax.inject.Named;
 @Data
 @Named
 @ConfigurationProperties(prefix = "web.dav.apple")
-public class AppleWebDavProperties {
+public class AppleWebDavProperties implements ServerProperties {
 
     private String calendarServer;
     private String cardServer;
-    private Ftl ftl;
-
-    @Data
-    public static class Ftl {
-
-        private String currentUserPrincipal;
-        private String displayName;
-    }
 }

@@ -1,4 +1,4 @@
-package com.tazamon.client.dav;
+package com.tazamon.client.dav.xml;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

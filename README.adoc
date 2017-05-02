@@ -11,4 +11,5 @@ THIRD-PARTY LIBRARIES USED
 
 Libraries used by Tazamon:
 
+* https://www.slf4j.org/[Slf4j] – http://opensource.org/licenses/mit-license.php[MIT License]
 * http://projectlombok.org/[Project Lombok] – http://opensource.org/licenses/mit-license.php[MIT License]

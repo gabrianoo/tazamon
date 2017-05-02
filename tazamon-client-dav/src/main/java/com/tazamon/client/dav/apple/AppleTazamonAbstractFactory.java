@@ -1,12 +1,16 @@
 package com.tazamon.client.dav.apple;
 
-import com.tazamon.client.dav.DefaultDavTazamonRequest;
-import com.tazamon.common.TazamonAbstractFactory;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonExecutor;
-import com.tazamon.common.FreeMarkerContentProducer;
+import com.tazamon.client.dav.common.DefaultDavTazamonRequest;
+import com.tazamon.client.dav.common.XmlProcessor;
+import com.tazamon.client.dav.xml.CurrentUserPrincipal;
+import com.tazamon.client.dav.xml.ETag;
+import com.tazamon.client.dav.xml.Property;
+import com.tazamon.client.dav.xml.PropertyFind;
+import com.tazamon.common.ServerProperties;
+import com.tazamon.common.TazamonAbstractFactory;
 import com.tazamon.common.User;
-import com.tazamon.configuration.AppleWebDavProperties;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Inject;
@@ -18,29 +22,31 @@ import java.util.Optional;
 public class AppleTazamonAbstractFactory implements TazamonAbstractFactory {
 
     private final DavTazamonExecutor davTazamonExecutor;
-    private final FreeMarkerContentProducer freeMarkerContentProducer;
+    private final XmlProcessor xmlProcessor;
     private final DavTazamonAdapter<Optional<User>> userDavTazamonAdapter;
-    private final AppleWebDavProperties appleWebDavProperties;
+    private final ServerProperties serverProperties;
 
     @Inject
     public AppleTazamonAbstractFactory(
             DavTazamonExecutor davTazamonExecutor,
-            FreeMarkerContentProducer freeMarkerContentProducer,
+            XmlProcessor xmlProcessor,
             DavTazamonAdapter<Optional<User>> userDavTazamonAdapter,
-            AppleWebDavProperties appleWebDavProperties
+            ServerProperties serverProperties
     ) {
         this.davTazamonExecutor = davTazamonExecutor;
-        this.freeMarkerContentProducer = freeMarkerContentProducer;
+        this.xmlProcessor = xmlProcessor;
         this.userDavTazamonAdapter = userDavTazamonAdapter;
-        this.appleWebDavProperties = appleWebDavProperties;
+        this.serverProperties = serverProperties;
     }
 
     @Override
     public Optional<User> provideUser(String email, String password) {
-        return freeMarkerContentProducer
-                .processTemplateIntoOptionalString(appleWebDavProperties.getFtl().getCurrentUserPrincipal(), null)
+        CurrentUserPrincipal currentUserPrincipal = new CurrentUserPrincipal();
+        Property prop = new Property(currentUserPrincipal);
+        PropertyFind propFind = new PropertyFind(prop);
+        return xmlProcessor.toXml(propFind)
                 .map(document ->
-                        new DefaultDavTazamonRequest(email, password, document, appleWebDavProperties.getCardServer())
+                        new DefaultDavTazamonRequest(email, password, document, serverProperties.getCalendarServer())
                 )
                 .flatMap(davTazamonExecutor::execute)
                 .flatMap(userDavTazamonAdapter::adapt);

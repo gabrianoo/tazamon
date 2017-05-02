@@ -1,4 +1,4 @@
-package com.tazamon.client.dav;
+package com.tazamon.client.dav.xml;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlValue;
 @Getter
 @ToString
 @EqualsAndHashCode
-@XmlRootElement(name = "displayname", namespace = "DAV:")
-public class DisplayName implements PropertyType {
+@XmlRootElement(name = "getetag", namespace = "DAV:")
+public class ETag implements PropertyType {
 
     @XmlValue
     private String value;

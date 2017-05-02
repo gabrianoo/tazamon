@@ -1,10 +1,10 @@
 package com.tazamon.calendar.apple;
 
 import com.tazamon.calendar.Calendar;
-import com.tazamon.client.dav.DisplayName;
+import com.tazamon.client.dav.xml.DisplayName;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonResponse;
-import com.tazamon.client.dav.PropertyType;
+import com.tazamon.client.dav.xml.PropertyType;
 
 import javax.inject.Named;
 import java.util.List;

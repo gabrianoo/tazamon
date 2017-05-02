@@ -2,12 +2,15 @@ package com.tazamon.calendar.apple;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
-import com.tazamon.client.dav.DefaultDavTazamonRequest;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonExecutor;
-import com.tazamon.common.FreeMarkerContentProducer;
+import com.tazamon.client.dav.common.DefaultDavTazamonRequest;
+import com.tazamon.client.dav.common.XmlProcessor;
+import com.tazamon.client.dav.xml.DisplayName;
+import com.tazamon.client.dav.xml.Property;
+import com.tazamon.client.dav.xml.PropertyFind;
+import com.tazamon.common.ServerProperties;
 import com.tazamon.common.User;
-import com.tazamon.configuration.AppleWebDavProperties;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,33 +22,35 @@ import java.util.Optional;
 public class AppleCalendarRepository implements CalendarRepository {
 
     private final DavTazamonExecutor davTazamonExecutor;
-    private final FreeMarkerContentProducer freeMarkerContentProducer;
+    private final XmlProcessor xmlProcessor;
     private final DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter;
-    private final AppleWebDavProperties appleWebDavProperties;
+    private final ServerProperties serverProperties;
 
     @Inject
     public AppleCalendarRepository(
             DavTazamonExecutor davTazamonExecutor,
-            FreeMarkerContentProducer freeMarkerContentProducer,
+            XmlProcessor xmlProcessor,
             DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter,
-            AppleWebDavProperties appleWebDavProperties
+            ServerProperties serverProperties
     ) {
         this.davTazamonExecutor = davTazamonExecutor;
-        this.freeMarkerContentProducer = freeMarkerContentProducer;
+        this.xmlProcessor = xmlProcessor;
         this.calendarDavTazamonAdapter = calendarDavTazamonAdapter;
-        this.appleWebDavProperties = appleWebDavProperties;
+        this.serverProperties = serverProperties;
     }
 
     @Override
     public List<Calendar> findAllCalendars(User user) {
-        Optional<List<Calendar>> calendars = freeMarkerContentProducer
-                .processTemplateIntoOptionalString(appleWebDavProperties.getFtl().getDisplayName(), null)
+        DisplayName displayName = new DisplayName();
+        Property prop = new Property(displayName);
+        PropertyFind propFind = new PropertyFind(prop);
+        Optional<List<Calendar>> calendars = xmlProcessor.toXml(propFind)
                 .map(document -> new DefaultDavTazamonRequest(
                         user.getBase64EncodeAuthToken(),
                         document,
                         String.join(
                                 "",
-                                appleWebDavProperties.getCalendarServer(),
+                                serverProperties.getCalendarServer(),
                                 user.getPrincipal(),
                                 "/calendars"
                         )

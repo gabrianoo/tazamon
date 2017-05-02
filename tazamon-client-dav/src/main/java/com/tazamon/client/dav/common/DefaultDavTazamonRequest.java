@@ -1,5 +1,6 @@
-package com.tazamon.client.dav;
+package com.tazamon.client.dav.common;
 
+import com.tazamon.client.dav.DavTazamonRequest;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;

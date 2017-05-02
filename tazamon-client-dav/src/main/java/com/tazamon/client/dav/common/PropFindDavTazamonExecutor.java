@@ -1,6 +1,9 @@
-package com.tazamon.client.dav;
+package com.tazamon.client.dav.common;
 
-import com.tazamon.common.XmlProcessor;
+import com.tazamon.client.dav.DavTazamonExecutor;
+import com.tazamon.client.dav.DavTazamonRequest;
+import com.tazamon.client.dav.DavTazamonResponse;
+import com.tazamon.client.dav.xml.MultiStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -24,7 +27,7 @@ import static org.apache.jackrabbit.webdav.DavConstants.PROPFIND_ALL_PROP;
  */
 @Slf4j
 @Named
-public class PropFindDavTazamonExecutor implements DavTazamonExecutor {
+public final class PropFindDavTazamonExecutor implements DavTazamonExecutor {
 
     private final HttpClient httpClient;
     private final XmlProcessor xmlProcessor;
