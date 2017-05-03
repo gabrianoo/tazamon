@@ -1,9 +1,11 @@
 package com.tazamon.client.dav.common;
 
 import com.tazamon.client.dav.DavTazamonRequest;
+import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
+
+import java.util.Base64;
 
 /**
  * The goal of this {@link DefaultDavTazamonRequest} is to wrap the Web Dav request for safe refactoring/maintaining later.
@@ -38,9 +40,12 @@ public class DefaultDavTazamonRequest implements DavTazamonRequest {
      * @param password used to connect to the required service, it can be application password
      *                 or user password if the user didn't enable two factor authentication.
      */
+    @NonNull
     private String base64EncodeAuthToken(String email, String password) {
         String authString = String.join(COLON, email, password);
-        String base64EncodeAuthToken = String.join(SPACE, BASIC, Base64.encodeBase64String(authString.getBytes()));
+        byte[] encodedAuthBytes = Base64.getEncoder().encode(authString.getBytes());
+        String encodedAuthString = new String(encodedAuthBytes);
+        String base64EncodeAuthToken = String.join(SPACE, BASIC, encodedAuthString);
         if (log.isDebugEnabled()) {
             log.debug("Base64 encoded auth string: [{}]", base64EncodeAuthToken);
         }
