@@ -1,10 +1,12 @@
 package com.tazamon.client.dav.common;
 
-import com.tazamon.client.dav.xml.CurrentUserPrincipal;
 import com.tazamon.client.dav.DavTazamonAdapter;
+import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.DavTazamonResponse;
-import com.tazamon.client.dav.xml.PropertyType;
+import com.tazamon.client.dav.xml.*;
 import com.tazamon.common.User;
+import com.tazamon.exception.UserParseException;
+import lombok.NonNull;
 
 import javax.inject.Named;
 import java.util.Optional;
@@ -17,37 +19,54 @@ public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<U
     private static final Pattern PRINCIPAL_PTRN = Pattern.compile("([0-9]+)");
 
     @Override
-    public Optional<User> adapt(DavTazamonResponse davTazamonResponse) {
-        return davTazamonResponse.getMultiStatus().getResponse()
-                .stream().findFirst().flatMap(
-                        response -> {
-                            Optional<User> userOptional = Optional.empty();
-                            PropertyType propertyType = response.getPropstat().getProperty().getPropertyType();
-                            if (propertyType instanceof CurrentUserPrincipal) {
-                                CurrentUserPrincipal currentUserPrincipal = ((CurrentUserPrincipal) propertyType);
-                                userOptional = Optional.of(
-                                        User.builder()
-                                                .principal(parsePrincipal(currentUserPrincipal.getHref()))
-                                                .base64EncodeAuthToken(
-                                                        davTazamonResponse
-                                                                .getDavTazamonRequest().getBase64EncodeAuthToken()
-                                                )
-                                                .build()
-                                );
-                            }
-                            return userOptional;
-                        }
+    public Optional<User> adapt(@NonNull DavTazamonResponse davTazamonResponse) {
+        return Optional.ofNullable(davTazamonResponse.getMultiStatus())
+                .map(MultiStatus::getResponse)
+                .flatMap(responses -> responses.stream().findFirst())
+                .map(Response::getPropstat)
+                .map(PropertyStatus::getProperty)
+                .map(Property::getPropertyType)
+                .map(propertyType ->
+                        parsePropertyType(
+                                propertyType,
+                                extractBase64EncodedToken(davTazamonResponse)
+                        )
+                );
+    }
+
+    private String extractBase64EncodedToken(DavTazamonResponse davTazamonResponse) {
+        return Optional.ofNullable(davTazamonResponse.getDavTazamonRequest())
+                .map(DavTazamonRequest::getBase64EncodeAuthToken)
+                .orElseThrow(
+                        () -> new UserParseException("Base64Encoded Token can't be null or missing")
+                );
+    }
+
+    private User parsePropertyType(PropertyType propertyType, String base64Token) {
+        if (!(propertyType instanceof CurrentUserPrincipal)) {
+            throw new UserParseException("DAV PropertyType must be instance of CurrentUserPrincipal");
+        }
+        CurrentUserPrincipal currentUserPrincipal = ((CurrentUserPrincipal) propertyType);
+        return User.builder()
+                .principal(extractPrincipal(currentUserPrincipal))
+                .base64EncodeAuthToken(base64Token)
+                .build();
+    }
+
+    private String extractPrincipal(CurrentUserPrincipal currentUserPrincipal) {
+        return Optional.ofNullable(currentUserPrincipal.getHref())
+                .map(this::parsePrincipal)
+                .orElseThrow(
+                        () -> new UserParseException("Principal can't be null or missing")
                 );
     }
 
     private String parsePrincipal(String href) {
-        String principal = null;
-        if (href != null && !href.isEmpty()) {
-            Matcher principalMatcher = PRINCIPAL_PTRN.matcher(href);
-            if (principalMatcher.find()) {
-                principal = principalMatcher.group();
-            }
+        Matcher principalMatcher = PRINCIPAL_PTRN.matcher(href);
+        String match = null;
+        if (principalMatcher.find()) {
+            match = principalMatcher.group();
         }
-        return principal;
+        return match;
     }
 }

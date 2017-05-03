@@ -1,6 +1,5 @@
 package com.tazamon.client.dav.xml;
 
-import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultDocument;
 import com.tazamon.xml.XmlProcessor;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +11,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
 import java.io.Writer;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -28,6 +25,10 @@ public class JaxbXmlProcessorTest {
     private Marshaller marshaller;
     @Mock
     private Unmarshaller unmarshaller;
+    @Mock
+    private Node node;
+    @Mock
+    private JAXBElement<Object> objectJAXBElement;
     private XmlProcessor underTestJaxbXmlProcessor;
 
     @Before
@@ -44,7 +45,7 @@ public class JaxbXmlProcessorTest {
                 );
         assertThat(
                 underTestJaxbXmlProcessor.toXml(new Object())
-        ).isEqualTo(Optional.of(EMPTY_STRING));
+        ).contains(EMPTY_STRING);
     }
 
     @Test
@@ -55,21 +56,21 @@ public class JaxbXmlProcessorTest {
                 );
         assertThat(
                 underTestJaxbXmlProcessor.toXml(new Object())
-        ).isEqualTo(Optional.empty());
+        ).isNotPresent();
     }
 
     @Test
     public void givenValidNodeAndClassTypeWhenUnMarshalingThenNotEmptyIsReturned() throws JAXBException {
-        JAXBElement<Object> objectJAXBElement = new JAXBElement<>(
-                new QName(EMPTY_STRING), Object.class, new Object()
-        );
+        Object o = new Object();
+        doReturn(o).when(objectJAXBElement)
+                .getValue();
         doReturn(objectJAXBElement).when(unmarshaller)
                 .unmarshal(
                         any(Node.class), any()
                 );
         assertThat(
-                underTestJaxbXmlProcessor.fromXml(new DefaultDocument(), Object.class)
-        ).isEqualTo(Optional.of(objectJAXBElement.getValue()));
+                underTestJaxbXmlProcessor.fromXml(node, Object.class)
+        ).contains(o);
     }
 
     @Test
@@ -79,7 +80,7 @@ public class JaxbXmlProcessorTest {
                         any(Node.class), any()
                 );
         assertThat(
-                underTestJaxbXmlProcessor.fromXml(new DefaultDocument(), Object.class)
-        ).isEqualTo(Optional.empty());
+                underTestJaxbXmlProcessor.fromXml(node, Object.class)
+        ).isNotPresent();
     }
 }

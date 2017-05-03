@@ -40,9 +40,11 @@ public class AppleTazamonAbstractFactory implements TazamonAbstractFactory {
 
     @Override
     public Optional<User> provideUser(String email, String password) {
-        CurrentUserPrincipal currentUserPrincipal = new CurrentUserPrincipal();
-        Property prop = new Property(currentUserPrincipal);
-        PropertyFind propFind = new PropertyFind(prop);
+        PropertyFind propFind = new PropertyFind(
+                new Property(
+                        new CurrentUserPrincipal()
+                )
+        );
         return xmlProcessor.toXml(propFind)
                 .map(document ->
                         new DefaultDavTazamonRequest(email, password, document, serverProperties.getCalendarServer())
