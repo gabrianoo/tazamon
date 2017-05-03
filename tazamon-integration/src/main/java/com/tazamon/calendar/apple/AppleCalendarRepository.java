@@ -5,12 +5,12 @@ import com.tazamon.calendar.CalendarRepository;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonExecutor;
 import com.tazamon.client.dav.common.DefaultDavTazamonRequest;
-import com.tazamon.client.dav.common.XmlProcessor;
 import com.tazamon.client.dav.xml.DisplayName;
 import com.tazamon.client.dav.xml.Property;
 import com.tazamon.client.dav.xml.PropertyFind;
 import com.tazamon.common.ServerProperties;
 import com.tazamon.common.User;
+import com.tazamon.xml.XmlProcessor;
 
 import javax.inject.Inject;
 import javax.inject.Named;

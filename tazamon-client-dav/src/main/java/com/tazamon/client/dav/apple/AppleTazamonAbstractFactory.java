@@ -3,14 +3,13 @@ package com.tazamon.client.dav.apple;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonExecutor;
 import com.tazamon.client.dav.common.DefaultDavTazamonRequest;
-import com.tazamon.client.dav.common.XmlProcessor;
 import com.tazamon.client.dav.xml.CurrentUserPrincipal;
-import com.tazamon.client.dav.xml.ETag;
 import com.tazamon.client.dav.xml.Property;
 import com.tazamon.client.dav.xml.PropertyFind;
 import com.tazamon.common.ServerProperties;
 import com.tazamon.common.TazamonAbstractFactory;
 import com.tazamon.common.User;
+import com.tazamon.xml.XmlProcessor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Inject;

@@ -5,10 +5,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.w3c.dom.Document;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * General Spring Configuration class to cover all the beans that are manually manged by our project.
@@ -61,5 +65,18 @@ public class TazamonConfiguration {
     @Bean
     public HttpClient provideHttpClient() {
         return HttpClients.createDefault();
+    }
+
+    /**
+     * Creates a {@link DocumentBuilder} for building an empty XML {@link Document} later.
+     *
+     * @return a {@link DocumentBuilder}.
+     * @throws ParserConfigurationException if a DocumentBuilder cannot be created which satisfies the configuration
+     *                                      requested.
+     */
+    @Bean
+    public DocumentBuilder buildXmlNode() throws ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        return docFactory.newDocumentBuilder();
     }
 }

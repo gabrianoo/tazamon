@@ -4,6 +4,7 @@ import com.tazamon.client.dav.DavTazamonExecutor;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.DavTazamonResponse;
 import com.tazamon.client.dav.xml.MultiStatus;
+import com.tazamon.xml.XmlProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,8 +14,7 @@ import org.apache.jackrabbit.webdav.client.methods.HttpPropfind;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilder;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -31,14 +31,17 @@ public final class PropFindDavTazamonExecutor implements DavTazamonExecutor {
 
     private final HttpClient httpClient;
     private final XmlProcessor xmlProcessor;
+    private final DocumentBuilder documentBuilder;
 
     @Inject
     public PropFindDavTazamonExecutor(
             HttpClient httpClient,
-            XmlProcessor xmlProcessor
+            XmlProcessor xmlProcessor,
+            DocumentBuilder documentBuilder
     ) {
         this.httpClient = httpClient;
         this.xmlProcessor = xmlProcessor;
+        this.documentBuilder = documentBuilder;
     }
 
     @Override
@@ -50,12 +53,16 @@ public final class PropFindDavTazamonExecutor implements DavTazamonExecutor {
             httpPropfind.addHeader(AUTHORIZATION, davTazamonRequest.getBase64EncodeAuthToken());
             httpPropfind.setEntity(new StringEntity(davTazamonRequest.getRequestBody()));
             HttpResponse httpResponse = httpClient.execute(httpPropfind);
-            MultiStatus multiStatus = xmlProcessor.fromXml(
-                    httpPropfind.getResponseBodyAsMultiStatus(httpResponse).toXml(XmlProcessor.buildXmlNode()),
-                    MultiStatus.class
-            );
-            responseWrapperOptional = Optional.of(new DefaultDavTazamonResponse(multiStatus, davTazamonRequest));
-        } catch (JAXBException | ParserConfigurationException | DavException | IOException e) {
+            responseWrapperOptional =
+                    xmlProcessor.fromXml(
+                            httpPropfind
+                                    .getResponseBodyAsMultiStatus(httpResponse)
+                                    .toXml(
+                                            documentBuilder.newDocument()
+                                    ),
+                            MultiStatus.class
+                    ).map(multiStatus -> new DefaultDavTazamonResponse(multiStatus, davTazamonRequest));
+        } catch (DavException | IOException e) {
             log.error("", e);
         }
         return responseWrapperOptional;
