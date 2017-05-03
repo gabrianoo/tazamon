@@ -21,13 +21,21 @@ public class DefaultDavTazamonRequest implements DavTazamonRequest {
     String requestBody;
     String serverUrl;
 
-    public DefaultDavTazamonRequest(String base64EncodeAuthToken, String requestBody, String serverUrl) {
+    public DefaultDavTazamonRequest(
+            @NonNull String base64EncodeAuthToken,
+            @NonNull String requestBody,
+            @NonNull String serverUrl
+    ) {
         this.base64EncodeAuthToken = base64EncodeAuthToken;
         this.requestBody = requestBody;
         this.serverUrl = serverUrl;
     }
 
-    public DefaultDavTazamonRequest(String email, String password, String requestBody, String serverUrl) {
+    public DefaultDavTazamonRequest(
+            @NonNull String email,
+            @NonNull String password,
+            @NonNull String requestBody,
+            @NonNull String serverUrl) {
         this.base64EncodeAuthToken = base64EncodeAuthToken(email, password);
         this.requestBody = requestBody;
         this.serverUrl = serverUrl;

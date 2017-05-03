@@ -1,5 +1,6 @@
 package com.tazamon.client.dav.common;
 
+import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.xml.*;
 import com.tazamon.common.User;
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -24,7 +26,7 @@ public class UserDavTazamonAdapterTest {
     private static final String PRINCIPAL_HREF = String.join("/", PRINCIPAL, "principal");
     @Mock
     private DavTazamonRequest davTazamonRequest;
-    private UserDavTazamonAdapter underTestUserDavTazamonAdapter;
+    private DavTazamonAdapter<Optional<User>> underTestUserDavTazamonAdapter;
 
     @Before
     public void setup() {
@@ -53,7 +55,7 @@ public class UserDavTazamonAdapterTest {
         );
         assertThat(thrown)
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("");
+                .hasMessageContaining("davTazamonResponse");
     }
 
     @Test
@@ -123,6 +125,27 @@ public class UserDavTazamonAdapterTest {
         assertThat(thrown)
                 .isInstanceOf(UserParseException.class)
                 .hasMessageContaining("Principal can't be null or missing");
+    }
+
+    @Test
+    public void givenInvalidBase64TokenWhenAdaptingUserThenExceptionIsThrown() {
+        doReturn(null).when(davTazamonRequest)
+                .getBase64EncodeAuthToken();
+        Throwable thrown = catchThrowable(
+                () -> underTestUserDavTazamonAdapter.adapt(
+                        new DefaultDavTazamonResponse(
+                                new MultiStatus(
+                                        Collections.singletonList(
+                                                buildMultiStatusResponse(new CurrentUserPrincipal(RESPONSE_HREF))
+                                        )
+                                ),
+                                davTazamonRequest
+                        )
+                )
+        );
+        assertThat(thrown)
+                .isInstanceOf(UserParseException.class)
+                .hasMessageContaining("Base64Encoded Token can't be null or missing");
     }
 
     @Test

@@ -5,12 +5,14 @@ import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.DavTazamonResponse;
 import com.tazamon.client.dav.xml.MultiStatus;
 import com.tazamon.xml.XmlProcessor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.entity.StringEntity;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.client.methods.HttpPropfind;
+import org.w3c.dom.Element;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,26 +47,30 @@ public final class PropFindDavTazamonExecutor implements DavTazamonExecutor {
     }
 
     @Override
-    public Optional<DavTazamonResponse> execute(DavTazamonRequest davTazamonRequest) {
-        Optional<DavTazamonResponse> responseWrapperOptional = Optional.empty();
-        HttpPropfind httpPropfind;
+    public Optional<DavTazamonResponse> execute(@NonNull DavTazamonRequest davTazamonRequest) {
+        return Optional.of(davTazamonRequest)
+                .map(this::executePropFindRequest)
+                .flatMap(
+                        element -> xmlProcessor.fromXml(element, MultiStatus.class)
+                ).map(
+                        multiStatus -> new DefaultDavTazamonResponse(multiStatus, davTazamonRequest)
+                );
+    }
+
+    private Element executePropFindRequest(DavTazamonRequest davTazamonRequest) {
+        Element element = null;
         try {
-            httpPropfind = new HttpPropfind(davTazamonRequest.getServerUrl(), PROPFIND_ALL_PROP, DEPTH_1);
+            HttpPropfind httpPropfind = new HttpPropfind(davTazamonRequest.getServerUrl(), PROPFIND_ALL_PROP, DEPTH_1);
             httpPropfind.addHeader(AUTHORIZATION, davTazamonRequest.getBase64EncodeAuthToken());
             httpPropfind.setEntity(new StringEntity(davTazamonRequest.getRequestBody()));
             HttpResponse httpResponse = httpClient.execute(httpPropfind);
-            responseWrapperOptional =
-                    xmlProcessor.fromXml(
-                            httpPropfind
-                                    .getResponseBodyAsMultiStatus(httpResponse)
-                                    .toXml(
-                                            documentBuilder.newDocument()
-                                    ),
-                            MultiStatus.class
-                    ).map(multiStatus -> new DefaultDavTazamonResponse(multiStatus, davTazamonRequest));
+            element = httpPropfind.getResponseBodyAsMultiStatus(httpResponse).toXml(documentBuilder.newDocument());
         } catch (DavException | IOException e) {
-            log.error("", e);
+            log.error(e.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("", e);
+            }
         }
-        return responseWrapperOptional;
+        return element;
     }
 }
