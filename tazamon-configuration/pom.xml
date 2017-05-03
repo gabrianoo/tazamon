@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.2.RELEASE</version>
+        <version>1.5.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -32,11 +32,12 @@
         <!-- JSRs -->
         <javax.inject.version>1</javax.inject.version>
         <!-- 3rd Parties Properties -->
-        <org.apache.jackrabbit.version>2.14.0</org.apache.jackrabbit.version>
+        <org.apache.jackrabbit.version>2.15.0</org.apache.jackrabbit.version>
         <org.projectlombok.version>1.16.16</org.projectlombok.version>
+        <org.assertj.version>3.6.2</org.assertj.version>
         <!-- Maven Plugins -->
-        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+        <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
     </properties>
 
     <!--==============================-->
@@ -54,7 +55,7 @@
                 <artifactId>jackrabbit-webdav</artifactId>
                 <version>${org.apache.jackrabbit.version}</version>
             </dependency>
-            <dependency>
+            <dependency><!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.version}</version>
