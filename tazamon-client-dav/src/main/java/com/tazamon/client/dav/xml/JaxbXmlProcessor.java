@@ -37,7 +37,10 @@ public class JaxbXmlProcessor implements XmlProcessor {
             marshaller.marshal(t, xmlWriter);
             nodeOptional = Optional.of(xmlWriter.toString());
         } catch (JAXBException e) {
-            log.error("", e);
+            log.error(e.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("", e);
+            }
         }
         return nodeOptional;
     }
@@ -49,7 +52,10 @@ public class JaxbXmlProcessor implements XmlProcessor {
             JAXBElement<T> jaxbElement = unmarshaller.unmarshal(node, declaredType);
             optionalT = Optional.of(jaxbElement.getValue());
         } catch (JAXBException e) {
-            log.error("", e);
+            log.error(e.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("", e);
+            }
         }
         return optionalT;
     }

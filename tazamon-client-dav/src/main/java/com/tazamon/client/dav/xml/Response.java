@@ -1,8 +1,6 @@
 package com.tazamon.client.dav.xml;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -10,6 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Getter
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlRootElement(name = "response")
 public class Response {
 
