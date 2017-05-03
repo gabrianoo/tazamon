@@ -83,17 +83,6 @@ public class PropFindDavTazamonExecutorTest {
     }
 
     @Test
-    public void givenNullRequestBodyWhenAdaptingUserThenIOExceptionIsThrown() {
-        Throwable thrown = catchThrowable(
-                () -> underTestPropFindDavTazamonExecutor.execute(
-                        new DefaultDavTazamonRequest("", null, "")
-                )
-        );
-        assertThat(thrown)
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
     public void givenInValidHttpPropfindWhenAdaptingUserThenIOExceptionIsThrown() throws IOException {
         doThrow(new IOException())
                 .when(httpClient).execute(any(HttpPropfind.class));
