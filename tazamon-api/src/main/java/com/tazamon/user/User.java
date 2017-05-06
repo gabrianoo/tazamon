@@ -1,4 +1,4 @@
-package com.tazamon.common;
+package com.tazamon.user;
 
 import com.tazamon.calendar.Calendar;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.tazamon.calendar;
 
-import com.tazamon.common.User;
+import com.tazamon.user.User;
 
 import java.util.List;
 

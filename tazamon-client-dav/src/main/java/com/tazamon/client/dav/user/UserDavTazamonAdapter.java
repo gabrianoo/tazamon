@@ -1,11 +1,11 @@
-package com.tazamon.client.dav.common;
+package com.tazamon.client.dav.user;
 
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.DavTazamonResponse;
 import com.tazamon.client.dav.xml.*;
-import com.tazamon.common.User;
 import com.tazamon.exception.UserParseException;
+import com.tazamon.user.User;
 import lombok.NonNull;
 
 import javax.inject.Named;

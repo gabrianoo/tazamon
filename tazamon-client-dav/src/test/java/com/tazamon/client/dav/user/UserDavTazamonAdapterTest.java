@@ -1,10 +1,11 @@
-package com.tazamon.client.dav.common;
+package com.tazamon.client.dav.user;
 
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonRequest;
+import com.tazamon.client.dav.common.DefaultDavTazamonResponse;
 import com.tazamon.client.dav.xml.*;
-import com.tazamon.common.User;
 import com.tazamon.exception.UserParseException;
+import com.tazamon.user.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,13 +15,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.tazamon.client.dav.common.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.doReturn;
 
 public class UserDavTazamonAdapterTest {
 
-    private static final String OK_STATUS = "HTTP/1.1 200 OK";
     private static final String RESPONSE_HREF = "/";
     private static final String PRINCIPAL = "562457900";
     private static final String PRINCIPAL_HREF = String.join("/", PRINCIPAL, "principal");
@@ -43,7 +44,7 @@ public class UserDavTazamonAdapterTest {
                         new Property(
                                 propertyType
                         ),
-                        OK_STATUS
+                        OK.getStatus()
                 )
         );
     }
@@ -96,7 +97,7 @@ public class UserDavTazamonAdapterTest {
                         new DefaultDavTazamonResponse(
                                 new MultiStatus(
                                         Collections.singletonList(
-                                                buildMultiStatusResponse(new ETag(OK_STATUS))
+                                                buildMultiStatusResponse(new ETag(OK.getStatus()))
                                         )
                                 ),
                                 davTazamonRequest

@@ -1,4 +1,4 @@
-package com.tazamon.client.dav.apple;
+package com.tazamon.client.dav.user;
 
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonExecutor;
@@ -7,8 +7,8 @@ import com.tazamon.client.dav.xml.CurrentUserPrincipal;
 import com.tazamon.client.dav.xml.Property;
 import com.tazamon.client.dav.xml.PropertyFind;
 import com.tazamon.common.ServerProperties;
-import com.tazamon.common.TazamonAbstractFactory;
-import com.tazamon.common.User;
+import com.tazamon.user.User;
+import com.tazamon.user.UserRepository;
 import com.tazamon.xml.XmlProcessor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Named
 @Slf4j
-public class AppleTazamonAbstractFactory implements TazamonAbstractFactory {
+public class DefaultUserRepository implements UserRepository {
 
     private final DavTazamonExecutor davTazamonExecutor;
     private final XmlProcessor xmlProcessor;
@@ -26,7 +26,7 @@ public class AppleTazamonAbstractFactory implements TazamonAbstractFactory {
     private final ServerProperties serverProperties;
 
     @Inject
-    public AppleTazamonAbstractFactory(
+    public DefaultUserRepository(
             DavTazamonExecutor davTazamonExecutor,
             XmlProcessor xmlProcessor,
             DavTazamonAdapter<Optional<User>> userDavTazamonAdapter,
@@ -39,7 +39,7 @@ public class AppleTazamonAbstractFactory implements TazamonAbstractFactory {
     }
 
     @Override
-    public Optional<User> provideUser(String email, String password) {
+    public Optional<User> findUser(String login, String password) {
         PropertyFind propFind = new PropertyFind(
                 new Property(
                         new CurrentUserPrincipal()
@@ -47,7 +47,7 @@ public class AppleTazamonAbstractFactory implements TazamonAbstractFactory {
         );
         return xmlProcessor.toXml(propFind)
                 .map(document ->
-                        new DefaultDavTazamonRequest(email, password, document, serverProperties.getCalendarServer())
+                        new DefaultDavTazamonRequest(login, password, document, serverProperties.getCalendarServer())
                 )
                 .flatMap(davTazamonExecutor::execute)
                 .flatMap(userDavTazamonAdapter::adapt);

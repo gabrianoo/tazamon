@@ -1,6 +1,6 @@
 package com.tazamon.contact;
 
-import com.tazamon.common.User;
+import com.tazamon.user.User;
 
 import java.util.List;
 

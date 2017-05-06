@@ -1,4 +1,4 @@
-package com.tazamon.calendar.apple;
+package com.tazamon.client.dav.calendar;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
@@ -9,7 +9,7 @@ import com.tazamon.client.dav.xml.DisplayName;
 import com.tazamon.client.dav.xml.Property;
 import com.tazamon.client.dav.xml.PropertyFind;
 import com.tazamon.common.ServerProperties;
-import com.tazamon.common.User;
+import com.tazamon.user.User;
 import com.tazamon.xml.XmlProcessor;
 
 import javax.inject.Inject;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Named
-public class AppleCalendarRepository implements CalendarRepository {
+public class DefaultCalendarRepository implements CalendarRepository {
 
     private final DavTazamonExecutor davTazamonExecutor;
     private final XmlProcessor xmlProcessor;
@@ -27,7 +27,7 @@ public class AppleCalendarRepository implements CalendarRepository {
     private final ServerProperties serverProperties;
 
     @Inject
-    public AppleCalendarRepository(
+    public DefaultCalendarRepository(
             DavTazamonExecutor davTazamonExecutor,
             XmlProcessor xmlProcessor,
             DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter,
