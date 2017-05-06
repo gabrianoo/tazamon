@@ -2,9 +2,8 @@ package com.tazamon;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
-import com.tazamon.common.TazamonAbstractFactory;
-import com.tazamon.common.User;
-import com.tazamon.configuration.AppleWebDavProperties;
+import com.tazamon.user.User;
+import com.tazamon.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +18,7 @@ import java.util.Optional;
 public class Application implements CommandLineRunner {
 
     @Inject
-    private TazamonAbstractFactory appleTazamonAbstractFactory;
+    private UserRepository userRepository;
     @Inject
     private CalendarRepository appleCalendarRepository;
 
@@ -29,9 +28,9 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        Optional<User> user = appleTazamonAbstractFactory
-                .provideUser(
-                        "YOUR EMAIL",
+        Optional<User> user = userRepository
+                .findUser(
+                        "YOU EMAIL",
                         "YOUR PASSWORD"
                 );
         user.ifPresent(u -> log.info("{}", u));
