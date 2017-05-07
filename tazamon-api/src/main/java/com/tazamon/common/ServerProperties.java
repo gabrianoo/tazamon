@@ -4,5 +4,5 @@ public interface ServerProperties {
 
     String getCalendarServer();
 
-    String getCardServer();
+    String getCalendarRoot();
 }

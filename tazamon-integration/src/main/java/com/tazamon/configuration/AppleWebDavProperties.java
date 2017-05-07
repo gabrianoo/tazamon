@@ -15,5 +15,5 @@ import javax.inject.Named;
 public class AppleWebDavProperties implements ServerProperties {
 
     private String calendarServer;
-    private String cardServer;
+    private String calendarRoot;
 }

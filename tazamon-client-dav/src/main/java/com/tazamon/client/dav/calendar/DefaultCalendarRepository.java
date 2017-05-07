@@ -21,6 +21,7 @@ import java.util.Optional;
 @Named
 public class DefaultCalendarRepository implements CalendarRepository {
 
+    private static final String URL_DELIMITER = "/";
     private final DavTazamonExecutor davTazamonExecutor;
     private final XmlProcessor xmlProcessor;
     private final DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter;
@@ -49,10 +50,10 @@ public class DefaultCalendarRepository implements CalendarRepository {
                         user.getBase64EncodeAuthToken(),
                         document,
                         String.join(
-                                "",
+                                URL_DELIMITER,
                                 serverProperties.getCalendarServer(),
                                 user.getPrincipal(),
-                                "/calendars"
+                                serverProperties.getCalendarRoot()
                         )
 
                 ))

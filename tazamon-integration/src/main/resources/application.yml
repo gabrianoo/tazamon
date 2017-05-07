@@ -5,8 +5,5 @@
 web:
   dav:
     apple:
-      calendarServer: https://caldav.icloud.com/
-      cardServer: https://contacts.icloud.com/
-    google:
-      calendarServer: https://caldav.icloud.com/
-      cardServer: https://contacts.icloud.com/
+      calendarServer: https://caldav.icloud.com
+      calendarRoot:   calendars
