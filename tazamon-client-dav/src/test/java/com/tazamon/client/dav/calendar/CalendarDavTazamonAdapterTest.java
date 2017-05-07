@@ -87,9 +87,9 @@ public class CalendarDavTazamonAdapterTest {
                         )
                 )
         ).contains(
-                Calendar.builder().name(CALENDAR_NAME).build()
+                Calendar.builder().selfLink(RESPONSE_HREF).name(CALENDAR_NAME).build()
         ).doesNotContain(
-                Calendar.builder().name(RESPONSE_HREF).build()
+                Calendar.builder().selfLink(RESPONSE_HREF).name(RESPONSE_HREF).build()
         );
     }
 

@@ -11,5 +11,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Calendar {
 
+    private String selfLink;
     private String name;
 }

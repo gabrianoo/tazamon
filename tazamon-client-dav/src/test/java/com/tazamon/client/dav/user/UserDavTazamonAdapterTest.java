@@ -86,7 +86,7 @@ public class UserDavTazamonAdapterTest {
                         )
                 )
         ).contains(
-                User.builder().principal(PRINCIPAL).base64EncodeAuthToken("").build()
+                User.builder().selfLink(RESPONSE_HREF).principal(PRINCIPAL).base64EncodeAuthToken("").build()
         );
     }
 

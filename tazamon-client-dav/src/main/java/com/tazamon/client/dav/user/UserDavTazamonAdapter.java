@@ -23,12 +23,9 @@ public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<U
         return Optional.ofNullable(davTazamonResponse.getMultiStatus())
                 .map(MultiStatus::getResponse)
                 .flatMap(responses -> responses.stream().findFirst())
-                .map(Response::getPropstat)
-                .map(PropertyStatus::getProperty)
-                .map(Property::getPropertyType)
-                .map(propertyType ->
-                        parsePropertyType(
-                                propertyType,
+                .flatMap(response ->
+                        parseResponse(
+                                response,
                                 extractBase64EncodedToken(davTazamonResponse)
                         )
                 );
@@ -42,15 +39,28 @@ public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<U
                 );
     }
 
-    private User parsePropertyType(PropertyType propertyType, String base64Token) {
+    private Optional<User> parseResponse(Response response, String base64Token) {
+        String selfLink = response.getHref();
+        return Optional.of(response)
+                .map(Response::getPropstat)
+                .map(PropertyStatus::getProperty)
+                .map(Property::getPropertyType)
+                .map(propertyType -> parsePropertyType(propertyType, base64Token, selfLink))
+                .orElse(Optional.empty());
+    }
+
+    private Optional<User> parsePropertyType(PropertyType propertyType, String base64Token, String selfLink) {
         if (!(propertyType instanceof CurrentUserPrincipal)) {
             throw new UserParseException("DAV PropertyType must be instance of CurrentUserPrincipal");
         }
         CurrentUserPrincipal currentUserPrincipal = ((CurrentUserPrincipal) propertyType);
-        return User.builder()
-                .principal(extractPrincipal(currentUserPrincipal))
-                .base64EncodeAuthToken(base64Token)
-                .build();
+        return Optional.of(
+                User.builder()
+                        .principal(extractPrincipal(currentUserPrincipal))
+                        .selfLink(selfLink)
+                        .base64EncodeAuthToken(base64Token)
+                        .build()
+        );
     }
 
     private String extractPrincipal(CurrentUserPrincipal currentUserPrincipal) {

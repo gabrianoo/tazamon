@@ -1,12 +1,9 @@
 package com.tazamon.user;
 
-import com.tazamon.calendar.Calendar;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -14,7 +11,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class User {
 
+    private String selfLink;
     private String principal;
     private String base64EncodeAuthToken;
-    private List<Calendar> calendars;
 }

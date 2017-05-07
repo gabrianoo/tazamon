@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.tazamon.client.dav.common.Status.OK;
 
@@ -24,10 +25,7 @@ public class CalendarDavTazamonAdapter implements DavTazamonAdapter<List<Calenda
                 .map(MultiStatus::getResponse)
                 .orElse(Collections.emptyList())
                 .stream().filter(this::filterResponse)
-                .map(Response::getPropstat)
-                .map(PropertyStatus::getProperty)
-                .map(Property::getPropertyType)
-                .map(this::parsePropertyType)
+                .flatMap(this::parseResponse)
                 .collect(Collectors.toList());
     }
 
@@ -40,14 +38,25 @@ public class CalendarDavTazamonAdapter implements DavTazamonAdapter<List<Calenda
                 ).isPresent();
     }
 
-    private Calendar parsePropertyType(PropertyType propertyType) {
+    private Stream<Calendar> parseResponse(Response response) {
+        String selfLink = response.getHref();
+        return Optional.ofNullable(response.getPropstat().getProperty())
+                .map(Property::getPropertyType)
+                .map(propertyType -> parsePropertyType(propertyType, selfLink))
+                .orElse(Stream.empty());
+    }
+
+    private Stream<Calendar> parsePropertyType(PropertyType propertyType, String selfLink) {
         if (!(propertyType instanceof DisplayName)) {
             throw new UserParseException("DAV PropertyType must be instance of DisplayName");
         }
         DisplayName displayName = ((DisplayName) propertyType);
-        return Calendar.builder()
-                .name(extractDisplayName(displayName))
-                .build();
+        return Stream.of(
+                Calendar.builder()
+                        .selfLink(selfLink)
+                        .name(extractDisplayName(displayName))
+                        .build()
+        );
     }
 
     private String extractDisplayName(DisplayName displayName) {
