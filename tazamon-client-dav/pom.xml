@@ -44,6 +44,18 @@
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-webdav</artifactId>
         </dependency>
+        <dependency><!-- Used for parsing ICS calendar files -->
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j</artifactId>
+        </dependency>
+        <dependency><!-- Used to support ACKNOWLEDGED tag -->
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j-extensions</artifactId>
+        </dependency>
+        <dependency><!-- Used to support parsing email addresses -->
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+        </dependency>
         <!--======================-->
         <!-- Testing Dependencies -->
         <!--======================-->

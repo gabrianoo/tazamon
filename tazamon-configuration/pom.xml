@@ -34,6 +34,8 @@
         <!-- 3rd Parties Properties -->
         <org.apache.jackrabbit.version>2.15.0</org.apache.jackrabbit.version>
         <org.projectlombok.version>1.16.16</org.projectlombok.version>
+        <org.mnode.ical4j.version>2.0.0</org.mnode.ical4j.version>
+        <org.mnode.ical4j-extensions.version>1.0.0</org.mnode.ical4j-extensions.version>
         <org.assertj.version>3.6.2</org.assertj.version>
         <!-- Maven Plugins -->
         <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
@@ -60,11 +62,20 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
-            <dependency>
+            <dependency><!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${org.assertj.version}</version>
+            </dependency>
+            <dependency><!-- https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j -->
+                <groupId>org.mnode.ical4j</groupId>
+                <artifactId>ical4j</artifactId>
+                <version>${org.mnode.ical4j.version}</version>
+            </dependency>
+            <dependency><!-- https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j-extensions -->
+                <groupId>org.mnode.ical4j</groupId>
+                <artifactId>ical4j-extensions</artifactId>
+                <version>${org.mnode.ical4j-extensions.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
