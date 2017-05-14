@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Optional;
 
@@ -32,11 +33,10 @@ public class JaxbXmlProcessor implements XmlProcessor {
     @Override
     public <T> Optional<String> toXml(T t) {
         Optional<String> nodeOptional = Optional.empty();
-        try {
-            StringWriter xmlWriter = new StringWriter();
+        try (StringWriter xmlWriter = new StringWriter()) {
             marshaller.marshal(t, xmlWriter);
             nodeOptional = Optional.of(xmlWriter.toString());
-        } catch (JAXBException e) {
+        } catch (JAXBException | IOException e) {
             log.error(e.getMessage());
             if (log.isDebugEnabled()) {
                 log.debug("", e);
