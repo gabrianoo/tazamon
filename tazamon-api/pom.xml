@@ -3,17 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<parent>
+    <parent>
         <groupId>com.otasys</groupId>
-		<artifactId>tazamon-configuration</artifactId>
+        <artifactId>tazamon-configuration</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../tazamon-configuration/pom.xml</relativePath>
     </parent>
-	
+
     <artifactId>tazamon-api</artifactId>
     <packaging>jar</packaging>
-	
-	<name>Tazamon API</name>
+
+    <name>Tazamon API</name>
 
     <scm>
         <url>https://github.com/gabrianoo/tazamon</url>
@@ -23,43 +23,13 @@
     </scm>
 
     <dependencies>
-        <dependency>
-            <groupId>org.mnode.ical4j</groupId>
-            <artifactId>ical4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-webdav</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-        </dependency>
-        <!-- Testing Dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
+        <!--==============================-->
+        <!-- Tazamon Managed Dependencies -->
+        <!--==============================-->
+        <dependency><!-- Used to eliminate boilerplate code -->
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

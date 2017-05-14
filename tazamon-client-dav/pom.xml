@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.otasys</groupId>
+        <artifactId>tazamon-configuration</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../tazamon-configuration/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>tazamon-client-dav</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Tazamon DAV Client</name>
+
+    <scm>
+        <url>https://github.com/gabrianoo/tazamon</url>
+        <connection>scm:git:https://github.com/gabrianoo/tazamon.git</connection>
+        <developerConnection>scm:git:https://github.com/gabrianoo/tazamon.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <dependencies>
+        <!--==============================-->
+        <!-- Tazamon Managed Dependencies -->
+        <!--==============================-->
+        <dependency><!-- Tazamon API -->
+            <groupId>com.otasys</groupId>
+            <artifactId>tazamon-api</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency><!-- Used to eliminate boilerplate code -->
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency><!-- Used for standardising DI framework -->
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+        <dependency><!-- Used for HTTP communications -->
+            <groupId>org.apache.jackrabbit</groupId>
+            <artifactId>jackrabbit-webdav</artifactId>
+        </dependency>
+        <dependency><!-- Used for parsing ICS calendar files -->
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j</artifactId>
+        </dependency>
+        <dependency><!-- Used to support ACKNOWLEDGED tag -->
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j-extensions</artifactId>
+        </dependency>
+        <dependency><!-- Used to support parsing email addresses -->
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+        </dependency>
+        <!--======================-->
+        <!-- Testing Dependencies -->
+        <!--======================-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

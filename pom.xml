@@ -14,12 +14,13 @@
     <packaging>pom</packaging>
 
     <name>Tazamon</name>
-    <description>Tazamon is web dav integration API and client(s) for providers like iCloud and Gmail.</description>
+    <description>Tazamon is web dav integration API and client(s) for providers like apple and google.</description>
 
     <modules>
         <module>tazamon-configuration</module>
         <module>tazamon-api</module>
-        <module>tazamon-rest</module>
+        <module>tazamon-client-dav</module>
+        <module>tazamon-integration</module>
     </modules>
 
     <scm>

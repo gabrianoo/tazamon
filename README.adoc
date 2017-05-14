@@ -1,7 +1,23 @@
 image:https://travis-ci.org/gabrianoo/tazamon.svg?branch=master["Build Status", link="https://travis-ci.org/gabrianoo/tazamon"]
 image:https://coveralls.io/repos/github/gabrianoo/tazamon/badge.svg?branch=master["Coverage Status", link="https://coveralls.io/github/gabrianoo/tazamon?branch=master"]
 
-Tazamon
-=======
+== TAZAMON
 
 Tazamon is a web dav integration API and client(s) to famous providers like iCloud and Gmail and also aims to easy web dav integration with these providers.
+
+== License
+
+Tazamon is Open Source software released under the
+http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
+
+== THIRD-PARTY LIBRARIES USED
+
+Libraries used by Tazamon:
+
+* https://github.com/apache/jackrabbit[Apache JackRabbit] - http://www.apache.org/licenses/LICENSE-2.0[Apache License V2.0]
+* https://github.com/joel-costigliola/assertj-core[AssertJ Core] - http://www.apache.org/licenses/LICENSE-2.0[Apache License V2.0]
+* https://github.com/ical4j/ical4j[ICal4j] - https://opensource.org/licenses/BSD-3-Clause[BSD 3-clause]
+* https://github.com/javax-inject/javax-inject[javax-inject] - http://www.apache.org/licenses/LICENSE-2.0[Apache License V2.0]
+* http://projectlombok.org/[Project Lombok] – http://opensource.org/licenses/mit-license.php[MIT License]
+* https://www.slf4j.org/[Slf4j] – http://opensource.org/licenses/mit-license.php[MIT License]
+* https://github.com/spring-projects/spring-framework[Spring Framework] - http://www.apache.org/licenses/LICENSE-2.0[Apache License V2.0]
