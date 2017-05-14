@@ -1,6 +1,6 @@
 package com.tazamon.client.dav.calendar;
 
-import com.tazamon.calendar.Calendar;
+import com.tazamon.calendar.Event;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.common.DefaultDavTazamonResponse;
@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -21,18 +23,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.doReturn;
 
-public class CalendarDavTazamonAdapterTest {
+public class EventDavTazamonAdapterTest {
 
+    private static final String PAYLOAD = "IcsValidCalendar.ics";
+    private static final String EVENT_SUMMARY = "Soda DeWarming";
     private static final String RESPONSE_HREF = "/";
-    private static final String CALENDAR_NAME = "Work";
     @Mock
     private DavTazamonRequest davTazamonRequest;
-    private DavTazamonAdapter<Iterable<Calendar>> underTestCalendarDavTazamonAdapter;
+    private String icsPayload;
+    private DavTazamonAdapter<Iterable<Event>> underTestEventDavTazamonAdapter;
 
     @Before
-    public void setup() {
+    public void setup() throws IOException {
+        InputStream resourceAsStream = getClass().getResourceAsStream(PAYLOAD);
+        byte[] resourceAsBytes = new byte[resourceAsStream.available()];
+        resourceAsStream.read(resourceAsBytes);
+        resourceAsStream.close();
+        icsPayload = new String(resourceAsBytes);
         MockitoAnnotations.initMocks(this);
-        underTestCalendarDavTazamonAdapter = new CalendarDavTazamonAdapter();
+        underTestEventDavTazamonAdapter = new EventDavTazamonAdapter();
         doReturn("").when(davTazamonRequest)
                 .getBase64EncodeAuthToken();
     }
@@ -50,9 +59,9 @@ public class CalendarDavTazamonAdapterTest {
     }
 
     @Test
-    public void givenNullDavTazamonResponseWhenAdaptingCalendarThenNullPointerExceptionIsThrown() {
+    public void givenNullDavTazamonResponseWhenAdaptingEventThenNullPointerExceptionIsThrown() {
         Throwable thrown = catchThrowable(
-                () -> underTestCalendarDavTazamonAdapter.adapt(null)
+                () -> underTestEventDavTazamonAdapter.adapt(null)
         );
         assertThat(thrown)
                 .isInstanceOf(NullPointerException.class)
@@ -60,9 +69,9 @@ public class CalendarDavTazamonAdapterTest {
     }
 
     @Test
-    public void givenMultiStatusResponseIsEmptyWhenAdaptingCalendarThenEmptyCalendarIterableIsReturned() {
+    public void givenMultiStatusResponseIsEmptyWhenAdaptingEventThenEmptyEventListIsReturned() {
         assertThat(
-                underTestCalendarDavTazamonAdapter.adapt(
+                underTestEventDavTazamonAdapter.adapt(
                         new DefaultDavTazamonResponse(
                                 new MultiStatus(Collections.emptyList()),
                                 null
@@ -72,30 +81,30 @@ public class CalendarDavTazamonAdapterTest {
     }
 
     @Test
-    public void givenMultiStatusResponseIsMoreThanOneWhenAdaptingCalendarThenOnlyOkStatusResponseIsPicked() {
+    public void givenMultiStatusResponseIsMoreThanOneWhenAdaptingEventThenOnlyOkStatusResponseIsPicked() {
         assertThat(
-                underTestCalendarDavTazamonAdapter.adapt(
+                underTestEventDavTazamonAdapter.adapt(
                         new DefaultDavTazamonResponse(
                                 new MultiStatus(
                                         Arrays.asList(
-                                                buildMultiStatusResponse(new DisplayName(CALENDAR_NAME), OK),
-                                                buildMultiStatusResponse(new DisplayName(RESPONSE_HREF), NOT_FOUND)
+                                                buildMultiStatusResponse(new CalendarData(icsPayload), OK),
+                                                buildMultiStatusResponse(new CalendarData(RESPONSE_HREF), NOT_FOUND)
                                         )
                                 ),
                                 davTazamonRequest
                         )
                 )
         ).contains(
-                Calendar.builder().selfLink(RESPONSE_HREF).name(CALENDAR_NAME).build()
+                Event.builder().selfLink(RESPONSE_HREF).summary(EVENT_SUMMARY).build()
         ).doesNotContain(
-                Calendar.builder().selfLink(RESPONSE_HREF).name(RESPONSE_HREF).build()
+                Event.builder().selfLink(RESPONSE_HREF).summary(RESPONSE_HREF).build()
         );
     }
 
     @Test
-    public void givenMultiStatusResponseWithInvalidPropertyTypeWhenAdaptingCalendarThenExceptionIsThrown() {
+    public void givenMultiStatusResponseWithInvalidPropertyTypeWhenAdaptingEventThenExceptionIsThrown() {
         Throwable thrown = catchThrowable(
-                () -> underTestCalendarDavTazamonAdapter.adapt(
+                () -> underTestEventDavTazamonAdapter.adapt(
                         new DefaultDavTazamonResponse(
                                 new MultiStatus(
                                         Collections.singletonList(
@@ -108,17 +117,17 @@ public class CalendarDavTazamonAdapterTest {
         );
         assertThat(thrown)
                 .isInstanceOf(ParsingException.class)
-                .hasMessageContaining("DAV PropertyType must be instance of DisplayName");
+                .hasMessageContaining("DAV PropertyType must be instance of CalendarData");
     }
 
     @Test
-    public void givenNullDisplayNameWhenAdaptingCalendarThenExceptionIsThrown() {
+    public void givenNullCalendarDataWhenAdaptingEventThenExceptionIsThrown() {
         Throwable thrown = catchThrowable(
-                () -> underTestCalendarDavTazamonAdapter.adapt(
+                () -> underTestEventDavTazamonAdapter.adapt(
                         new DefaultDavTazamonResponse(
                                 new MultiStatus(
                                         Collections.singletonList(
-                                                buildMultiStatusResponse(new DisplayName(null), OK)
+                                                buildMultiStatusResponse(new CalendarData(null), OK)
                                         )
                                 ),
                                 davTazamonRequest
@@ -127,6 +136,25 @@ public class CalendarDavTazamonAdapterTest {
         );
         assertThat(thrown)
                 .isInstanceOf(ParsingException.class)
-                .hasMessageContaining("DisplayName value can't be null or missing");
+                .hasMessageContaining("CalendarData value can't be null or missing");
+    }
+
+    @Test
+    public void givenInValidCalendarDataWhenAdaptingEventThenExceptionIsThrown() {
+        Throwable thrown = catchThrowable(
+                () -> underTestEventDavTazamonAdapter.adapt(
+                        new DefaultDavTazamonResponse(
+                                new MultiStatus(
+                                        Collections.singletonList(
+                                                buildMultiStatusResponse(new CalendarData(PAYLOAD), OK)
+                                        )
+                                ),
+                                davTazamonRequest
+                        )
+                )
+        );
+        assertThat(thrown)
+                .isInstanceOf(ParsingException.class)
+                .hasMessageContaining("Couldn't parse calendar VEVENT");
     }
 }

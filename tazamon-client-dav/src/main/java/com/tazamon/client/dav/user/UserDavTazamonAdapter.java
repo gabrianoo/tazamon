@@ -4,7 +4,7 @@ import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.DavTazamonResponse;
 import com.tazamon.client.dav.xml.*;
-import com.tazamon.exception.UserParseException;
+import com.tazamon.exception.ParsingException;
 import com.tazamon.user.User;
 import lombok.NonNull;
 
@@ -35,7 +35,7 @@ public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<U
         return Optional.ofNullable(davTazamonResponse.getDavTazamonRequest())
                 .map(DavTazamonRequest::getBase64EncodeAuthToken)
                 .orElseThrow(
-                        () -> new UserParseException("Base64Encoded Token can't be null or missing")
+                        () -> new ParsingException("Base64Encoded Token can't be null or missing")
                 );
     }
 
@@ -51,7 +51,7 @@ public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<U
 
     private Optional<User> parsePropertyType(PropertyType propertyType, String base64Token, String selfLink) {
         if (!(propertyType instanceof CurrentUserPrincipal)) {
-            throw new UserParseException("DAV PropertyType must be instance of CurrentUserPrincipal");
+            throw new ParsingException("DAV PropertyType must be instance of CurrentUserPrincipal");
         }
         CurrentUserPrincipal currentUserPrincipal = ((CurrentUserPrincipal) propertyType);
         return Optional.of(
@@ -67,7 +67,7 @@ public final class UserDavTazamonAdapter implements DavTazamonAdapter<Optional<U
         return Optional.ofNullable(currentUserPrincipal.getHref())
                 .map(this::parsePrincipal)
                 .orElseThrow(
-                        () -> new UserParseException("Principal can't be null or missing")
+                        () -> new ParsingException("Principal can't be null or missing")
                 );
     }
 

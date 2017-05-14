@@ -27,7 +27,7 @@ public class DefaultUserRepository implements UserRepository {
 
     @Inject
     public DefaultUserRepository(
-            DavTazamonExecutor davTazamonExecutor,
+            @Named("propFindDavTazamonExecutor") DavTazamonExecutor davTazamonExecutor,
             XmlProcessor xmlProcessor,
             DavTazamonAdapter<Optional<User>> userDavTazamonAdapter,
             ServerProperties serverProperties

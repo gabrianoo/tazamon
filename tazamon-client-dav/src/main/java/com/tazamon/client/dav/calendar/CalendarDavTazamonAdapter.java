@@ -4,12 +4,11 @@ import com.tazamon.calendar.Calendar;
 import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonResponse;
 import com.tazamon.client.dav.xml.*;
-import com.tazamon.exception.UserParseException;
+import com.tazamon.exception.ParsingException;
 import lombok.NonNull;
 
 import javax.inject.Named;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,10 +16,10 @@ import java.util.stream.Stream;
 import static com.tazamon.client.dav.common.Status.OK;
 
 @Named
-public class CalendarDavTazamonAdapter implements DavTazamonAdapter<List<Calendar>> {
+public class CalendarDavTazamonAdapter implements DavTazamonAdapter<Iterable<Calendar>> {
 
     @Override
-    public List<Calendar> adapt(@NonNull DavTazamonResponse davTazamonResponse) {
+    public Iterable<Calendar> adapt(@NonNull DavTazamonResponse davTazamonResponse) {
         return Optional.ofNullable(davTazamonResponse.getMultiStatus())
                 .map(MultiStatus::getResponse)
                 .orElse(Collections.emptyList())
@@ -48,7 +47,7 @@ public class CalendarDavTazamonAdapter implements DavTazamonAdapter<List<Calenda
 
     private Stream<Calendar> parsePropertyType(PropertyType propertyType, String selfLink) {
         if (!(propertyType instanceof DisplayName)) {
-            throw new UserParseException("DAV PropertyType must be instance of DisplayName");
+            throw new ParsingException("DAV PropertyType must be instance of DisplayName");
         }
         DisplayName displayName = ((DisplayName) propertyType);
         return Stream.of(
@@ -62,7 +61,7 @@ public class CalendarDavTazamonAdapter implements DavTazamonAdapter<List<Calenda
     private String extractDisplayName(DisplayName displayName) {
         return Optional.ofNullable(displayName.getValue())
                 .orElseThrow(
-                        () -> new UserParseException("DisplayName value can't be null or missing")
+                        () -> new ParsingException("DisplayName value can't be null or missing")
                 );
     }
 }

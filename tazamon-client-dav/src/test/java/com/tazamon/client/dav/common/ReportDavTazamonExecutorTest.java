@@ -1,6 +1,5 @@
 package com.tazamon.client.dav.common;
 
-
 import com.tazamon.client.dav.DavTazamonExecutor;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.xml.*;
@@ -8,7 +7,7 @@ import com.tazamon.xml.XmlProcessor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.entity.InputStreamEntity;
-import org.apache.jackrabbit.webdav.client.methods.HttpPropfind;
+import org.apache.jackrabbit.webdav.client.methods.HttpReport;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -29,25 +28,26 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
-public class PropFindDavTazamonExecutorTest {
+public class ReportDavTazamonExecutorTest {
 
-    private static final String PAYLOAD = "MultiStatusUserPrincipalValidResponse.xml";
+    private static final String PAYLOAD = "MultiStatusCalendarDataValidResponse.xml";
+    private static final String V_EVENT_STRING = "VEVENT";
     private static final String RESPONSE_HREF = "/";
-    private static final String PRINCIPAL_HREF = "/123456789/principal";
     @Mock
     private HttpClient httpClient;
     @Mock
     private XmlProcessor xmlProcessor;
     @Mock
     private HttpResponse httpResponse;
-    private DavTazamonExecutor underTestPropFindDavTazamonExecutor;
+    //    private String
+    private DavTazamonExecutor underTestReportDavTazamonExecutor;
 
     @Before
     public void setup() throws ParserConfigurationException {
         MockitoAnnotations.initMocks(this);
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = docFactory.newDocumentBuilder();
-        underTestPropFindDavTazamonExecutor = new PropFindDavTazamonExecutor(
+        underTestReportDavTazamonExecutor = new ReportDavTazamonExecutor(
                 httpClient,
                 xmlProcessor,
                 documentBuilder
@@ -73,9 +73,9 @@ public class PropFindDavTazamonExecutorTest {
     }
 
     @Test
-    public void givenNullDavTazamonResponseWhenExecutingPropFindThenNullPointerExceptionIsThrown() {
+    public void givenNullDavTazamonResponseWhenExecutingReportThenNullPointerExceptionIsThrown() {
         Throwable thrown = catchThrowable(
-                () -> underTestPropFindDavTazamonExecutor.execute(null)
+                () -> underTestReportDavTazamonExecutor.execute(null)
         );
         assertThat(thrown)
                 .isInstanceOf(NullPointerException.class)
@@ -83,33 +83,33 @@ public class PropFindDavTazamonExecutorTest {
     }
 
     @Test
-    public void givenInValidHttpPropfindWhenExecutingPropFindThenIOExceptionIsThrown() throws IOException {
+    public void givenInValidHttpReportWhenExecutingReportThenIOExceptionIsThrown() throws IOException {
         doThrow(new IOException())
-                .when(httpClient).execute(any(HttpPropfind.class));
+                .when(httpClient).execute(any(HttpReport.class));
         assertThat(
-                underTestPropFindDavTazamonExecutor.execute(
+                underTestReportDavTazamonExecutor.execute(
                         buildDavTazamonRequest()
                 )
         ).isNotPresent();
     }
 
     @Test
-    public void givenValidDavTazamonRequestWhenExecutingPropFindThenValidDavTazamonResponseIsReturned() throws IOException {
+    public void givenValidDavTazamonRequestWhenExecutingReportThenValidDavTazamonResponseIsReturned() throws IOException {
         doReturn(httpResponse)
-                .when(httpClient).execute(any(HttpPropfind.class));
+                .when(httpClient).execute(any(HttpReport.class));
         doReturn(new InputStreamEntity(getClass().getResourceAsStream(PAYLOAD)))
                 .when(httpResponse).getEntity();
         doReturn(
                 Optional.of(
                         new MultiStatus(
                                 Collections.singletonList(
-                                        buildMultiStatusResponse(new CurrentUserPrincipal(PRINCIPAL_HREF))
+                                        buildMultiStatusResponse(new CalendarData(V_EVENT_STRING))
                                 )
                         )
                 )
         ).when(xmlProcessor).fromXml(any(Node.class), any());
         assertThat(
-                underTestPropFindDavTazamonExecutor.execute(
+                underTestReportDavTazamonExecutor.execute(
                         buildDavTazamonRequest()
                 )
         ).containsInstanceOf(DefaultDavTazamonResponse.class);

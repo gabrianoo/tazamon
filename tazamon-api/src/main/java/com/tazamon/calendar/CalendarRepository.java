@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CalendarRepository {
 
-    List<Calendar> findAllCalendars(User user);
+    Iterable<Calendar> findAllCalendars(User user);
 }

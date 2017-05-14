@@ -2,6 +2,8 @@ package com.tazamon;
 
 import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
+import com.tazamon.calendar.Event;
+import com.tazamon.calendar.EventRepository;
 import com.tazamon.user.User;
 import com.tazamon.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -20,7 +21,9 @@ public class Application implements CommandLineRunner {
     @Inject
     private UserRepository userRepository;
     @Inject
-    private CalendarRepository appleCalendarRepository;
+    private CalendarRepository calendarRepository;
+    @Inject
+    private EventRepository eventRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -35,9 +38,13 @@ public class Application implements CommandLineRunner {
                 );
         user.ifPresent(u -> log.info("{}", u));
         if (user.isPresent()) {
-            List<Calendar> calendars = appleCalendarRepository.findAllCalendars(user.get());
+            Iterable<Calendar> calendars = calendarRepository.findAllCalendars(user.get());
             calendars.forEach(
                     calendar -> log.info("{}", calendar)
+            );
+            Iterable<Event> events = eventRepository.findAllEvents(user.get());
+            events.forEach(
+                    event -> log.info("{}", event)
             );
         }
     }

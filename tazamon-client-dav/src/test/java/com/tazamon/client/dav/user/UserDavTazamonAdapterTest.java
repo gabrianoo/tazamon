@@ -4,7 +4,7 @@ import com.tazamon.client.dav.DavTazamonAdapter;
 import com.tazamon.client.dav.DavTazamonRequest;
 import com.tazamon.client.dav.common.DefaultDavTazamonResponse;
 import com.tazamon.client.dav.xml.*;
-import com.tazamon.exception.UserParseException;
+import com.tazamon.exception.ParsingException;
 import com.tazamon.user.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -105,7 +105,7 @@ public class UserDavTazamonAdapterTest {
                 )
         );
         assertThat(thrown)
-                .isInstanceOf(UserParseException.class)
+                .isInstanceOf(ParsingException.class)
                 .hasMessageContaining("DAV PropertyType must be instance of CurrentUserPrincipal");
     }
 
@@ -124,7 +124,7 @@ public class UserDavTazamonAdapterTest {
                 )
         );
         assertThat(thrown)
-                .isInstanceOf(UserParseException.class)
+                .isInstanceOf(ParsingException.class)
                 .hasMessageContaining("Principal can't be null or missing");
     }
 
@@ -145,7 +145,7 @@ public class UserDavTazamonAdapterTest {
                 )
         );
         assertThat(thrown)
-                .isInstanceOf(UserParseException.class)
+                .isInstanceOf(ParsingException.class)
                 .hasMessageContaining("Base64Encoded Token can't be null or missing");
     }
 
@@ -164,7 +164,7 @@ public class UserDavTazamonAdapterTest {
                 )
         );
         assertThat(thrown)
-                .isInstanceOf(UserParseException.class)
+                .isInstanceOf(ParsingException.class)
                 .hasMessageContaining("Principal can't be null or missing");
     }
 }
