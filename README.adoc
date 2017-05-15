@@ -3,7 +3,9 @@ image:https://coveralls.io/repos/github/gabrianoo/tazamon/badge.svg?branch=maste
 
 == TAZAMON
 
-Tazamon is a web dav integration API and client(s) to famous providers like iCloud and Gmail and also aims to easy web dav integration with these providers.
+In the age of the cloud providers; end-user's contacts and calendars end up scattered. One contact ended up with several dads and meetings always collide.
+Having multiple cloud accounts specially if one of them is a work account drive you to dust business and lost socks in the washing machines.
+Tazamon aims to put an end to this by unifying and syncing all the cloud providers contacts and calendars together.
 
 == License
 
