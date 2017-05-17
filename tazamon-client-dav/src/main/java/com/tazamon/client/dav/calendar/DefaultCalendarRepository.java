@@ -15,7 +15,6 @@ import com.tazamon.xml.XmlProcessor;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collections;
-import java.util.List;
 
 @Named
 public class DefaultCalendarRepository implements CalendarRepository {
@@ -23,14 +22,14 @@ public class DefaultCalendarRepository implements CalendarRepository {
     private static final String URL_DELIMITER = "/";
     private final DavTazamonExecutor davTazamonExecutor;
     private final XmlProcessor xmlProcessor;
-    private final DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter;
+    private final DavTazamonAdapter<Iterable<Calendar>> calendarDavTazamonAdapter;
     private final ServerProperties serverProperties;
 
     @Inject
     public DefaultCalendarRepository(
             @Named("propFindDavTazamonExecutor") DavTazamonExecutor davTazamonExecutor,
             XmlProcessor xmlProcessor,
-            DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter,
+            DavTazamonAdapter<Iterable<Calendar>> calendarDavTazamonAdapter,
             ServerProperties serverProperties
     ) {
         this.davTazamonExecutor = davTazamonExecutor;

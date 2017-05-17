@@ -14,8 +14,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.Writer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 public class JaxbXmlProcessorTest {

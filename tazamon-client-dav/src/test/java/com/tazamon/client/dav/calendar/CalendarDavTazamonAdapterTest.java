@@ -73,6 +73,7 @@ public class CalendarDavTazamonAdapterTest {
 
     @Test
     public void givenMultiStatusResponseIsMoreThanOneWhenAdaptingCalendarThenOnlyOkStatusResponseIsPicked() {
+        Calendar expectedCalendar = Calendar.builder().selfLink(RESPONSE_HREF).name(CALENDAR_NAME).build();
         assertThat(
                 underTestCalendarDavTazamonAdapter.adapt(
                         new DefaultDavTazamonResponse(
@@ -86,9 +87,11 @@ public class CalendarDavTazamonAdapterTest {
                         )
                 )
         ).contains(
-                Calendar.builder().selfLink(RESPONSE_HREF).name(CALENDAR_NAME).build()
+                expectedCalendar
         ).doesNotContain(
                 Calendar.builder().selfLink(RESPONSE_HREF).name(RESPONSE_HREF).build()
+        ).describedAs(
+                expectedCalendar.toString()
         );
     }
 

@@ -37,7 +37,8 @@ public class EventDavTazamonAdapterTest {
     public void setup() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream(PAYLOAD);
         byte[] resourceAsBytes = new byte[resourceAsStream.available()];
-        resourceAsStream.read(resourceAsBytes);
+        int read = resourceAsStream.read(resourceAsBytes);
+        assertThat(read).isGreaterThan(0);
         resourceAsStream.close();
         icsPayload = new String(resourceAsBytes);
         MockitoAnnotations.initMocks(this);

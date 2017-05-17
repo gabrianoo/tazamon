@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<multistatus xmlns="DAV:">
+    <response>
+        <href>/123456789.ics</href>
+        <propstat>
+            <prop>
+                <getetag xmlns="DAV:">"C=ETAG"</getetag>
+                <calendar-data xmlns="urn:ietf:params:xml:ns:caldav"><![CDATA[VCALENDAR]]></calendar-data>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+</multistatus>

@@ -15,12 +15,13 @@ import javax.inject.Named;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static net.fortuna.ical4j.model.Calendar.VCALENDAR;
+import static net.fortuna.ical4j.model.Component.VEVENT;
+
 @Named
 public class DefaultEventRepository implements EventRepository {
 
     private static final String URL_DELIMITER = "/";
-    private static final String VCALENDAR = "VCALENDAR";
-    private static final String VEVENT = "VEVENT";
     private final DavTazamonExecutor davTazamonExecutor;
     private final XmlProcessor xmlProcessor;
     private final DavTazamonAdapter<Iterable<Event>> eventDavTazamonAdapter;
@@ -59,8 +60,8 @@ public class DefaultEventRepository implements EventRepository {
     private CalendarQuery buildRequest() {
         return new CalendarQuery(
                 Arrays.asList(
-                        new ETag(null),
-                        new CalendarData(null)
+                        new ETag(""),
+                        new CalendarData("")
                 ),
                 new Filter(
                         new CompFilter(

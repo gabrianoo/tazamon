@@ -11,7 +11,7 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "multistatus")
+@XmlRootElement(name = "multistatus", namespace = "DAV:")
 public class MultiStatus {
 
     @XmlElement(name = "response", namespace = "DAV:")

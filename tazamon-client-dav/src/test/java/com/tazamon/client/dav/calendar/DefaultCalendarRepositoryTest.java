@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +33,7 @@ public class DefaultCalendarRepositoryTest {
     @Mock
     private XmlProcessor xmlProcessor;
     @Mock
-    private DavTazamonAdapter<List<Calendar>> calendarDavTazamonAdapter;
+    private DavTazamonAdapter<Iterable<Calendar>> calendarDavTazamonAdapter;
     @Mock
     private ServerProperties serverProperties;
     private DefaultCalendarRepository underTestDefaultCalendarRepository;

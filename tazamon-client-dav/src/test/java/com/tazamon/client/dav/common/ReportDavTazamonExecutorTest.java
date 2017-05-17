@@ -39,7 +39,6 @@ public class ReportDavTazamonExecutorTest {
     private XmlProcessor xmlProcessor;
     @Mock
     private HttpResponse httpResponse;
-    //    private String
     private DavTazamonExecutor underTestReportDavTazamonExecutor;
 
     @Before

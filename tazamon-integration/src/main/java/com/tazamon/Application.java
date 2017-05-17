@@ -4,7 +4,6 @@ import com.tazamon.calendar.Calendar;
 import com.tazamon.calendar.CalendarRepository;
 import com.tazamon.calendar.Event;
 import com.tazamon.calendar.EventRepository;
-import com.tazamon.user.User;
 import com.tazamon.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -12,18 +11,25 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 @Slf4j
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
+    private final UserRepository userRepository;
+    private final CalendarRepository calendarRepository;
+    private final EventRepository eventRepository;
+
     @Inject
-    private UserRepository userRepository;
-    @Inject
-    private CalendarRepository calendarRepository;
-    @Inject
-    private EventRepository eventRepository;
+    public Application(
+            UserRepository userRepository,
+            CalendarRepository calendarRepository,
+            EventRepository eventRepository
+    ) {
+        this.userRepository = userRepository;
+        this.calendarRepository = calendarRepository;
+        this.eventRepository = eventRepository;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -31,21 +37,21 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        Optional<User> user = userRepository
+        userRepository
                 .findUser(
-                        "YOU EMAIL",
+                        "YOUR EMAIL",
                         "YOUR PASSWORD"
-                );
-        user.ifPresent(u -> log.info("{}", u));
-        if (user.isPresent()) {
-            Iterable<Calendar> calendars = calendarRepository.findAllCalendars(user.get());
-            calendars.forEach(
-                    calendar -> log.info("{}", calendar)
-            );
-            Iterable<Event> events = eventRepository.findAllEvents(user.get());
-            events.forEach(
-                    event -> log.info("{}", event)
-            );
-        }
+                )
+                .ifPresent(user -> {
+                    log.info("{}", user);
+                    Iterable<Calendar> calendars = calendarRepository.findAllCalendars(user);
+                    calendars.forEach(
+                            calendar -> log.info("{}", calendar)
+                    );
+                    Iterable<Event> events = eventRepository.findAllEvents(user);
+                    events.forEach(
+                            event -> log.info("{}", event)
+                    );
+                });
     }
 }
