@@ -1,4 +1,10 @@
 ###############################
+# Application Server Properties
+###############################
+server:
+  contextPath: /api
+
+###############################
 # Our Custom Web Dav Properties
 ###############################
 ## iCloud Web Dav Properties

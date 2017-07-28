@@ -33,6 +33,7 @@
         <javax.inject.version>1</javax.inject.version>
         <!-- 3rd Parties Properties -->
         <org.apache.jackrabbit.version>2.15.0</org.apache.jackrabbit.version>
+        <com.squareup.okhttp3.version>3.8.1</com.squareup.okhttp3.version>
         <org.projectlombok.version>1.16.16</org.projectlombok.version>
         <org.mnode.ical4j.version>2.0.0</org.mnode.ical4j.version>
         <org.mnode.ical4j-extensions.version>1.0.0</org.mnode.ical4j-extensions.version>
@@ -52,10 +53,10 @@
                 <artifactId>javax.inject</artifactId>
                 <version>${javax.inject.version}</version>
             </dependency>
-            <dependency><!-- https://mvnrepository.com/artifact/org.apache.jackrabbit/jackrabbit-webdav -->
-                <groupId>org.apache.jackrabbit</groupId>
-                <artifactId>jackrabbit-webdav</artifactId>
-                <version>${org.apache.jackrabbit.version}</version>
+            <dependency><!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${com.squareup.okhttp3.version}</version>
             </dependency>
             <dependency><!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
                 <groupId>org.projectlombok</groupId>
@@ -76,6 +77,12 @@
                 <groupId>org.mnode.ical4j</groupId>
                 <artifactId>ical4j-extensions</artifactId>
                 <version>${org.mnode.ical4j-extensions.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>mockwebserver</artifactId>
+                <version>${com.squareup.okhttp3.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

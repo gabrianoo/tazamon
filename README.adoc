@@ -7,6 +7,30 @@ In the age of the cloud providers; end-user's contacts and calendars end up scat
 Having multiple cloud accounts specially if one of them is a work account drive you to dust business and lost socks in the washing machines.
 Tazamon aims to put an end to this by unifying and syncing all the cloud providers contacts and calendars together.
 
+== Examples
+
+=== Logging to the system
+
+First request oauth2 token
+
+```bash
+curl -X POST --user 'client:secret' -d 'grant_type=password&username=APPLE_ID&password=APPLE_PASSWORD' http://localhost:8080/api/oauth/token
+```
+```json
+{
+    "access_token":"acae7fe2-c7f5-4675-8278-760bfd63bd02",
+    "token_type":"bearer",
+    "refresh_token":"0c76018d-e392-4dbe-8e6b-0645ad36910f",
+    "expires_in":43199,
+    "scope":"read write"
+}
+```
+
+Reuse the token to access your resources
+```bash
+curl -X GET -H 'Authorization: bearer acae7fe2-c7f5-4675-8278-760bfd63bd02' http://localhost:8080/api/calendars
+```
+
 == License
 
 Tazamon is Open Source software released under the
